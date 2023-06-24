@@ -1,18 +1,21 @@
-CC = g++
-CFLAGS = -Wall -std=c++14
-LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+CXX = g++
+CXXFLAGS = -Wall -std=c++14
+INCLUDE = -I./ -I./game_objects
+LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -L/usr/lib/
 
-OBJS = main.o game.o game_objects/collision_handler.o game_objects/enemy_spaceship.o game_objects/shot.o \
-       game_objects/spaceship.o screen/score_panel.o screen/window.o thread/cpu.o thread/debug.o thread/main_class.o \
-       thread/semaphore.o thread/system.o thread/thread.o
+all: main
 
-all: game
+main: game.o window.o main.o
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -o main game.o window.o main.o $(LDFLAGS)
 
-game: $(OBJS)
-	$(CC) -o $@ $^ $(LDFLAGS)
+game.o: game.cc game.h
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c game.cc
 
-%.o: %.cc
-	$(CC) -c $(CFLAGS) $< -o $@
+window.o: window.cc window.h
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c window.cc
+
+main.o: main.cc
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c main.cc
 
 clean:
-	rm -f $(OBJS) game
+	rm -f *.o main

@@ -1,10 +1,14 @@
-#include "screen/window.h"
+#include "window.h"
+#include <SFML/Graphics/RenderWindow.hpp>
+#include "game.h"
 
 int main(void)
 {
-    Window window;
+    sf::RenderWindow window(sf::VideoMode(900, 560), "SFML works!");
+    Game game(window);
+    Window game_window(game);
 
-    window.run();
+    game_window.run();
 
     return 0;
 }

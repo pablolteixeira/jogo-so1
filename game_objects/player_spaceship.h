@@ -1,19 +1,40 @@
-#ifndef player_spaceship_h
-#define player_spaceship_h
+#ifndef player_spaceship
+#define player_spaceship
 
-#include "game_object.h"
-#include "spaceship.h"
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
-class PlayerSpaceship : public Spaceship {
+class PlayerSpaceship {
 public:
-	PlayerSpaceship();
-    void handleInput(sf::Event event);
-	void increaseScore(int score);
-	bool isDead() { return lives <= 0; }
+	void handleInput(sf::Keyboard::Key key) {
+        const float speed = 100.0f;  // speed in units per second
 
-	int score = 0;
-	int lives = 3;
+        if (key == sf::Keyboard::Up) {
+            velocity.y = -speed;
+        } else if (key == sf::Keyboard::Down) {
+            velocity.y = speed;
+        } else if (key == sf::Keyboard::Left) {
+            velocity.x = -speed;
+        } else if (key == sf::Keyboard::Right) {
+            velocity.x = speed;
+        }
+		// TODO: handle player shooting
+    }	
+
+	void update(float dt) {
+		sprite.move(velocity * dt);
+	}
+
+	void draw(sf::RenderWindow& window) const {
+		window.draw(sprite);
+	}
+
+private:
+	sf::Sprite sprite;
+	sf::Vector2f velocity;
 };
+
 
 #endif
