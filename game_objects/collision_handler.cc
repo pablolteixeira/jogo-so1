@@ -3,18 +3,16 @@
 #include "enemy_spaceship.h"
 #include "game_object.h"
 #include <SFML/Graphics.hpp>
-#include "game.h"
+#include "../game.h"
 
-bool CollisionHandler::checkCollision(GameObject *obj1, GameObject *obj2) {
-	return obj1->sprite.getGlobalBounds()
-		.intersects(obj2->sprite.getGlobalBounds());
+bool CollisionHandler::checkCollisions() {
+	printf("COLLISION\n");
 }
 
 void CollisionHandler::handleShotEnemyHit(Shot *shot, EnemySpaceship *ship) {
-	Spaceship *player = shot->owner;
 	shot->die();
 	ship->die();
-	player->increaseScore(100);
+	Game::player_ship->increaseScore(100);
 }
 
 void CollisionHandler::handlePlayerHit(PlayerSpaceship *player_ship, GameObject* hitter) {

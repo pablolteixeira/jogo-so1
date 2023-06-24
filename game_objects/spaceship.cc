@@ -26,7 +26,7 @@ void Spaceship::fire() {
 	}
 	shot->owner = this;
 			
-	Shot::queue_mutex.p();
+	//Shot::queue_mutex.p();
 	Shot::getActiveShots().push_back(shot);
-	Shot::queue_mutex.v();
+	//Shot::queue_mutex.v();
 }

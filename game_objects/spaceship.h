@@ -3,7 +3,7 @@
 
 #include "game_object.h"
 #include <SFML/Graphics.hpp>
-#include "direction.h"
+#include "../enums/direction.h"
 
 class Spaceship : public GameObject {
 public:

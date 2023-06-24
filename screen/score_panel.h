@@ -9,6 +9,7 @@ public:
     ScorePanel();
     void addPoints(int points);
     void draw(sf::RenderWindow &window);
+	void update();
 private:
     int score;
     sf::Text scoreText;

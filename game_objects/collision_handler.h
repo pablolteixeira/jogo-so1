@@ -1,5 +1,5 @@
-#ifndef collision_handler
-#define collision_handler
+#ifndef collision_handler_h
+#define collision_handler_h
 
 #include "game_object.h"
 #include <SFML/Graphics.hpp>
@@ -10,7 +10,7 @@
 class CollisionHandler {
 public:
 	CollisionHandler();
-	bool checkCollision(GameObject *obj1, GameObject *obj2);
+	bool checkCollisions();
 	void handlePlayerHit(PlayerSpaceship *player_ship, GameObject *hitter);
 	void handleShotEnemyHit(Shot *shot, EnemySpaceship *ship);
 	void handleBorderShotCollision(Shot *shot);

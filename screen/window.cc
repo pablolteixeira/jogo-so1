@@ -1,4 +1,5 @@
 #include "window.h"
+#include "../game.h"
 
 
 Window::Window()
@@ -17,6 +18,9 @@ void Window::run()
     //Link: https://www.sfml-dev.org/tutorials/2.5/window-events.php
     //https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Keyboard.php
     window.setKeyRepeatEnabled(false);
+	Game *game = new Game();
+	sf::Clock *clock;
+	game->clock = clock;
 
     while (window.isOpen())
     {
@@ -52,6 +56,12 @@ void Window::run()
             
             }
         }
+
+		sf::Time elapsed = clock->restart();
+        float dt = elapsed.asSeconds();
+
+		game->update(dt);
+		game->draw();
 
         window.clear();
         window.draw(maze_sprite);

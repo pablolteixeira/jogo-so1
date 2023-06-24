@@ -3,7 +3,7 @@
 
 #include "game_object.h"
 #include "spaceship.h"
-#include "traits.h"
+#include "../thread/traits.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -22,7 +22,7 @@ public:
 	bool isAlive = true;
 	void run(); 
 	static std::vector<Shot*> getActiveShots() { return active_shots; } ;
-	static SOLUTION::Semaphore queue_mutex; 
+	//static SOLUTION::Semaphore queue_mutex; 
 	void die() override;
 	Spaceship *owner;
    

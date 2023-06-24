@@ -1,19 +1,14 @@
 
 #include "shot.h"
-#include "game.h"
+#include "../game.h"
 #include "game_object.h"
 #include <SFML/Graphics.hpp>
 #include <tuple>
 
-void Shot::move() {
-	position_x += 5; // TODO: achar um valor bom aqui
-	position_y += 5;
-}
-
 std::tuple<bool, GameObject*> Shot::detectHit() {
-	for (GameObject & obj : Game::getGameObjects()) {
-		if (Game::checkCollision(*this, obj)) {
-			return std::make_tuple(true, &obj);
+	for (GameObject * obj : Game::getGameObjects()) {
+		if (Game::checkCollision(*this, *obj)) {
+			return std::make_tuple(true, obj);
 		}
 	}
 	return std::make_tuple(false, nullptr);
@@ -31,9 +26,9 @@ void Shot::run() {
     }
 }
 
-void Shot::die() {
-	isAlive = false;
-	queue_mutex.p();
-	active_shots.erase(std::remove(active_shots.begin(), active_shots.end(), this), active_shots.end());
-	queue_mutex.v();
-}
+//void Shot::die() {
+//	isAlive = false;
+//	queue_mutex.p();
+//	active_shots.erase(std::remove(active_shots.begin(), active_shots.end(), this), active_shots.end());
+//	queue_mutex.v();
+//}

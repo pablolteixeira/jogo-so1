@@ -1,4 +1,4 @@
-#include "window.h"
+#include "screen/window.h"
 
 int main(void)
 {

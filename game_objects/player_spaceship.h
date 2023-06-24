@@ -10,6 +10,7 @@ public:
 	PlayerSpaceship();
     void handleInput(sf::Event event);
 	void increaseScore(int score);
+	bool isDead() { return lives <= 0; }
 
 	int score = 0;
 	int lives = 3;
