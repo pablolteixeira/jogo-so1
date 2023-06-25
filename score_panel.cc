@@ -12,17 +12,17 @@ ScorePanel::ScorePanel() {
     // Initialize text objects
     this->playerLivesText.setFont(this->font);
     this->playerLivesText.setCharacterSize(24); // adjust the size as you like
-    this->playerLivesText.setFillColor(sf::Color::Black); // color
+    this->playerLivesText.setFillColor(sf::Color::White); // color
     this->playerLivesText.setPosition(600.f, 20.f); // set position near right side of the window
 
     this->scoreText.setFont(this->font);
     this->scoreText.setCharacterSize(24);
-    this->scoreText.setFillColor(sf::Color::Black);
+    this->scoreText.setFillColor(sf::Color::White);
     this->scoreText.setPosition(600.f, 60.f);
 
     this->velocityText.setFont(this->font);
     this->velocityText.setCharacterSize(24);
-    this->velocityText.setFillColor(sf::Color::Black);
+    this->velocityText.setFillColor(sf::Color::White);
     this->velocityText.setPosition(600.f, 100.f);
 }
 
