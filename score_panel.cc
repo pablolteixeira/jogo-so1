@@ -4,7 +4,7 @@
 
 ScorePanel::ScorePanel() {
 	// Load font
-    if (!this->font.loadFromFile("/usr/share/fonts/gnu-free/FreeSansBold.otf")) { // Adjust the file path as necessary
+    if (!this->font.loadFromFile("fonts/free_sans_bold.otf")) { // Adjust the file path as necessary
         std::cout << "Failed to load font\n";
         exit(1);
     }

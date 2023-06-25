@@ -5,19 +5,9 @@ SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
 all: main
 
-main: game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -o main game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o $(SFML_LIBS)
+main: game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o shot.o
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -o main game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o shot.o $(SFML_LIBS)
 
-<<<<<<< HEAD
-game.o: game.cc game.h
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c game.cc
-
-main.o: main.cc
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c main.cc
-
-enemy_ship.o: enemy_ship.cc enemy_ship.h
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c enemy_ship.cc
-=======
 _DEPS = window.h Game.h Ship.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
@@ -26,7 +16,6 @@ OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.cpp $(DEPS)
 	$(CC) -std=c++14 -c -o $@ $< $(CFLAGS)
->>>>>>> 22fc5ba46a30289040941cf0f21b2d6310b763c3
 
 player_ship.o: player_ship.cc player_ship.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c player_ship.cc
@@ -39,6 +28,9 @@ score_panel.o: score_panel.cc score_panel.h
 
 collision_handler.o: collision_handler.cc collision_handler.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c collision_handler.cc
+
+shot.o: shot.cc shot.h
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c shot.cc
 
 clean:
 	rm -f *.o main
