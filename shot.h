@@ -2,14 +2,15 @@
 #define SHOT_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
 #include "enums/direction.h"
 #include "enums/ship_type.h"
 
 class Shot {
 public:
-    Shot(float startX, float startY, Direction direction, ShipType shipType);
+    Shot(float startX, float startY, Direction direction, ShipType shipType, float speed);
     ~Shot();
-    static void updateShots();
+    static void updateShots(float dt);
     static void renderShots(sf::RenderWindow& window);
 	void die();
     
@@ -18,15 +19,16 @@ public:
     ShipType ship_type;
 
 private:
-    void update();
+    void update(float dt);
     void render(sf::RenderWindow& window);
-	void move();
+	void move(float dt);
 
     //  Variables
     sf::Vector2f position;
     sf::Texture texture;
     float speed;
     Direction direction;
+	sf::Vector2f directionVector;
 };
 
 #endif

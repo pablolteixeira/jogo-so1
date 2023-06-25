@@ -36,6 +36,8 @@ PlayerShip::PlayerShip(sf::Vector2f position, Direction shipDirection, SharedSta
 			break;
 	}
 
+	changeDirection(shipDirection);
+
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(0.5f, 0.5f);
 	this->sprite.setPosition(position);
@@ -116,7 +118,17 @@ void PlayerShip::move(float dt) {
 }
 
 void PlayerShip::shoot() {
-	Shot* shot = new Shot(sprite.getPosition().x, sprite.getPosition().y, this->direction, ShipType::PLAYER);
-	
-	Shot::_shots.push_back(shot);
+    float shotWidth = sprite.getGlobalBounds().width / 3.0f;
+    float shotHeight = sprite.getGlobalBounds().height / 3.0f;
+
+    float playerCenterX = sprite.getPosition().x + sprite.getGlobalBounds().width / 2.0f;
+    float playerCenterY = sprite.getPosition().y + sprite.getGlobalBounds().height / 2.0f;
+
+    float shotStartX = playerCenterX - shotWidth / 2.0f;
+    float shotStartY = playerCenterY - shotHeight / 2.0f;
+
+    Shot* shot = new Shot(shotStartX, shotStartY, this->direction, ShipType::PLAYER, 320.f);
+    Shot::_shots.push_back(shot);
 }
+
+

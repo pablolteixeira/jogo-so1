@@ -59,7 +59,7 @@ const bool Game::running() const {
 
 void Game::update(float dt) {
 	player->update(dt);
-	Shot::updateShots();
+	Shot::updateShots(dt);
 	collision_handler.checkShipBorderCollision(*player);
 
 	for (auto& shot : Shot::_shots) {

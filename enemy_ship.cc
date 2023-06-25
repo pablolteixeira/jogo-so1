@@ -2,9 +2,12 @@
 #include <SFML/System/Vector2.hpp>
 #include "collision_handler.h"
 #include "enemy_ship.h"
+#include "enums/direction.h"
 #include "player_ship.h"
+#include <iostream>
 #include <math.h>
 #include "game.h"
+#include "shot.h"
 
 EnemyShip::EnemyShip(sf::Vector2f position, Direction direction, PlayerShip* player) {
     // Load the texture, set initial direction, speed, etc.
@@ -16,22 +19,24 @@ EnemyShip::EnemyShip(sf::Vector2f position, Direction direction, PlayerShip* pla
 
 	switch (direction) {
 		case Direction::UP:
-    		this->direction = sf::Vector2f(0.f, -1.f); 
+    		this->directionVector = sf::Vector2f(0.f, -1.f); 
 			texture.loadFromFile("sprites/space_ships/enemy_space_ship1.png");
 			break;
 		case Direction::DOWN:
-			this->direction = sf::Vector2f(0.f, 1.f);
+			this->directionVector = sf::Vector2f(0.f, 1.f);
 			texture.loadFromFile("sprites/space_ships/enemy_space_ship3.png");
 			break;
 		case Direction::LEFT:
-			this->direction = sf::Vector2f(-1.f, 0.f);
+			this->directionVector = sf::Vector2f(-1.f, 0.f);
 			texture.loadFromFile("sprites/space_ships/enemy_space_ship2.png");
 			break;
 		case Direction::RIGHT:
-			this->direction = sf::Vector2f(1.f, 0.f);
+			this->directionVector = sf::Vector2f(1.f, 0.f);
 			texture.loadFromFile("sprites/space_ships/enemy_space_ship4.png");
 			break;
 	}
+
+	this->direction = direction;
 
     sprite.setTexture(texture);
     sprite.setScale(0.5, 0.5);
@@ -47,6 +52,7 @@ EnemyShip::~EnemyShip(){
 }
 
 void EnemyShip::die() {
+	shootTimer = 0.f;
 	isAlive = false;
 	deathClock.restart();
 }
@@ -100,7 +106,6 @@ void EnemyShip::update(float dt, Game& game) {
         this->move(dt);
         shootTimer += dt;
         if (shootTimer > shootDelay) {
-            shootTimer = 0.f;
             this->shoot();
         }
     }
@@ -113,40 +118,58 @@ void EnemyShip::move(float dt) {
 
     // Normalize the direction
     float magnitude = sqrt((directionToPlayer.x * directionToPlayer.x) + (directionToPlayer.y * directionToPlayer.y));
-    direction = sf::Vector2f(directionToPlayer.x / magnitude, directionToPlayer.y / magnitude);
+    directionVector = sf::Vector2f(directionToPlayer.x / magnitude, directionToPlayer.y / magnitude);
 
-    // Update the sprite direction
     updateDirection();
-
-    sprite.move(direction * speed * dt);
+    sprite.move(directionVector * speed * dt);
 }
 
 void EnemyShip::updateDirection() {
-    float angle = atan2(direction.y, direction.x) * 180 / 3.14159;
+    float angle = atan2(directionVector.y, directionVector.x) * 180 / 3.14159;
 
     if (angle > -45 && angle <= 45) {
         // Right
-        this->direction = sf::Vector2f(1.f, 0.f);
+		direction = Direction::RIGHT;
+        this->directionVector = sf::Vector2f(1.f, 0.f);
         texture.loadFromFile("sprites/space_ships/enemy_space_ship4.png");
     } else if (angle > 45 && angle <= 135) {
         // Down
-        this->direction = sf::Vector2f(0.f, 1.f);
+		direction = Direction::DOWN;
+        this->directionVector = sf::Vector2f(0.f, 1.f);
         texture.loadFromFile("sprites/space_ships/enemy_space_ship3.png");
     } else if ((angle > 135 && angle <= 180) || (angle >= -180 && angle <= -135)) {
         // Left
-        this->direction = sf::Vector2f(-1.f, 0.f);
+		direction = Direction::LEFT;
+        this->directionVector = sf::Vector2f(-1.f, 0.f);
         texture.loadFromFile("sprites/space_ships/enemy_space_ship2.png");
     } else if (angle > -135 && angle <= -45) {
         // Up
-        this->direction = sf::Vector2f(0.f, -1.f); 
+		direction = Direction::UP;
+        this->directionVector = sf::Vector2f(0.f, -1.f); 
         texture.loadFromFile("sprites/space_ships/enemy_space_ship1.png");
     }
     
     sprite.setTexture(texture);
 }
+
 void EnemyShip::shoot() {
-    // Create a new shot and add to the shot list
-    // You can set the shot direction to player's position at the moment of shooting
+	if (!isAlive || shootTimer < shootDelay) {
+		return;
+	}
+
+    float shotWidth = sprite.getGlobalBounds().width / 3.0f;
+    float shotHeight = sprite.getGlobalBounds().height / 3.0f;
+
+    float playerCenterX = sprite.getPosition().x + sprite.getGlobalBounds().width / 2.0f;
+    float playerCenterY = sprite.getPosition().y + sprite.getGlobalBounds().height / 2.0f;
+
+    float shotStartX = playerCenterX - shotWidth / 2.0f;
+    float shotStartY = playerCenterY - shotHeight / 2.0f;
+
+    Shot* shot = new Shot(shotStartX, shotStartY, this->direction, ShipType::ENEMY, shootSpeed);
+    Shot::_shots.push_back(shot);
+
+	shootTimer = 0.f;
 }
 
 void EnemyShip::render(sf::RenderWindow& window) {

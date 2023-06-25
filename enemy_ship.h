@@ -22,10 +22,12 @@ public:
 	bool isAlive = true;
     
 private:
-    sf::Vector2f direction;
+	Direction direction;
+    sf::Vector2f directionVector;
     float speed;
-    float shootDelay;
-    float shootTimer;
+    float shootDelay = 2.f;
+    float shootTimer = 0.f;
+	float shootSpeed = 180.f;
     sf::Texture texture;
 	PlayerShip *player;
     //Shot shot; // Assumption: Shot class for the shots fired by the enemy

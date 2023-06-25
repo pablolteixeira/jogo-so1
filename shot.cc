@@ -1,16 +1,18 @@
 #include "shot.h"
 #include "enums/ship_type.h"
 #include "player_ship.h"
+#include <SFML/System/Vector2.hpp>
 #include <iostream>
 #include <vector>
 
 std::vector<Shot*> Shot::_shots;
 
-Shot::Shot(float startX, float startY, Direction direction, ShipType shipType) {
+Shot::Shot(float startX, float startY, Direction direction, ShipType shipType, float speed) {
     this->position.x = startX;
     this->position.y = startY;
     this->direction = direction;
     this->ship_type = shipType;
+	this->speed = speed;
 
     this->texture.loadFromFile("sprites/space_ships/shot.png");
     this->sprite.setTexture(this->texture);
@@ -23,30 +25,30 @@ Shot::Shot(float startX, float startY, Direction direction, ShipType shipType) {
 Shot::~Shot() {
 }
 
-void Shot::move() {
+void Shot::move(float dt) {
+    sprite.move(directionVector * speed * dt);
+}
+
+void Shot::update(float dt) {
     switch (direction)
     {
     case Direction::UP:
-        this->position.y -= 20.0f;
+		directionVector = sf::Vector2f(0.f, -1.f);
         break;
     case Direction::DOWN:
-        this->position.y += 20.0f;
+		directionVector = sf::Vector2f(0.f, 1.f);
         break;
     case Direction::RIGHT:
-        this->position.x += 20.0f;
+		directionVector = sf::Vector2f(1.f, 0.f);
         break;
     case Direction::LEFT:
-        this->position.x -= 20.0f;
+		directionVector = sf::Vector2f(-1.f, 0.f);
         break;
     default:
         break;
     }
-    
-	this->sprite.setPosition(this->position);
-}
-
-void Shot::update() {
-	move();	
+	
+	move(dt);
 }
 
 void Shot::render(sf::RenderWindow& window) {
@@ -58,11 +60,12 @@ void Shot::die() {
 	if (it != Shot::_shots.end()) {
 		Shot::_shots.erase(it);
 	}
+	std::cout << "shot died fr\n";
 }
 
-void Shot::updateShots() {
+void Shot::updateShots(float dt) {
 	for (auto& shot : Shot::_shots) {
-		shot->update();
+		shot->update(dt);
 	}
 }
 
