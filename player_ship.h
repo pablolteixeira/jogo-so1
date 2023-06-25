@@ -15,6 +15,8 @@ public:
     void update();
     void render(sf::RenderWindow& window);
     sf::Sprite sprite;
+	int lives = 3;
+	int score = 0;
 	//void run();
     
 private:

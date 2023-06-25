@@ -16,6 +16,7 @@
 #include "input.h"
 #include "enums/shared_state.h"
 #include "player_ship.h"
+#include "score_panel.h"
 
 class Game {
 public:
@@ -24,6 +25,7 @@ public:
 	void update(float dt);
 	void render();
 	void handleEvents();
+	int wave_velocity = 1;
 
 	sf::Clock clock;
 	const bool running() const;
@@ -34,6 +36,7 @@ private:
 	sf::VideoMode video_mode;
 	Input input;
 	SharedState shared_state;
+	ScorePanel score_panel;
 
 	// TODO: make a class for enemy
 	std::vector<std::unique_ptr<EnemyShip>> enemies;

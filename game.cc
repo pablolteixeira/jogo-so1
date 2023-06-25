@@ -1,6 +1,7 @@
 #include "game.h"
 #include "enums/direction.h"
 #include "player_ship.h"
+#include "score_panel.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
@@ -8,7 +9,7 @@
 #include <sys/stat.h>
 #include <vector>
 
-Game::Game(SharedState& state) {
+Game::Game(SharedState& state) : score_panel() {
 	initVariables();
 	initWindow();
 	initEnemies();
@@ -41,6 +42,8 @@ void Game::update(float dt) {
 	for (auto& enemy : enemies) {
 		enemy->update(dt);	
 	}
+
+	score_panel.update(player->lives, player->score, wave_velocity);
 }
 
 void Game::render() {
@@ -52,6 +55,8 @@ void Game::render() {
 	for (auto& enemy : enemies) {
 		enemy->render(*window);
 	}
+
+	score_panel.render(*window);
 
 	window->display();
 }
