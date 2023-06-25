@@ -64,13 +64,9 @@ void Game::update(float dt) {
 	Shot::updateShots(dt);
 	collision_handler.checkShipBorderCollision(*player);
 
-<<<<<<< HEAD
 	for (auto& shot : Shot::_shots) {
 		collision_handler.checkShotBorderCollision(*shot);
 	}
-=======
-	window->getSize();
->>>>>>> 004d195 (I don't remmeber what i did here)
 
 	for (auto& enemy : enemies) {
 		enemy->update(dt, *this, window->getSize());
@@ -147,22 +143,12 @@ void Game::initEnemies() {
 		Direction::DOWN, Direction::DOWN, Direction::UP, Direction::UP
 	};
 
-<<<<<<< HEAD
 	std::vector<Algorithm> algorithms = {
 		Algorithm::FOLLOW_PLAYER, Algorithm::SNIPER
 	};
 
 	for (int i = 0; i < 4; i++) {
 		std::unique_ptr<EnemyShip> enemy = std::make_unique<EnemyShip>(positions[i], directions[i], player.get(), algorithms[i % 2]);
-=======
-	std::vector<MovementAlgorithm> algorithms = {
-		MovementAlgorithm::FOLLOW_PLAYER,
-		MovementAlgorithm::RANDOM_MOVEMENT
-	};
-
-	for (int i = 0; i < 4; i++) {
-		std::unique_ptr<EnemyShip> enemy = std::make_unique<EnemyShip>(positions[i], directions[i], player.get(), algorithms[i%2]);
->>>>>>> 004d195 (I don't remmeber what i did here)
 		enemies.push_back(std::move(enemy));
 	}
 	std::cout << "end -- initenemies\n";

@@ -5,13 +5,8 @@ SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
 all: main
 
-<<<<<<< HEAD
 main: game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o shot.o
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -o main game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o shot.o $(SFML_LIBS)
-=======
-main: game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o 
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -o main game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o $(SFML_LIBS)
->>>>>>> 004d195 (I don't remmeber what i did here)
 
 _DEPS = window.h Game.h Ship.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
