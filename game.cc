@@ -60,8 +60,12 @@ const bool Game::running() const {
 void Game::update(float dt) {
 	//player->update(dt);
 	player->update();
-	player->updateShots();
+	Shot::updateShots();
 	collision_handler.checkShipBorderCollision(*player);
+
+	for (auto& shot : Shot::_shots) {
+		collision_handler.checkShotBorderCollision(*shot);
+	}
 
 	for (auto& enemy : enemies) {
 		enemy->update(dt);
@@ -81,7 +85,7 @@ void Game::render() {
 	window->draw(left_frame);
 
 	player->render(*window);
-	player->renderShots(*window);
+	Shot::renderShots(*window);
 	for (auto& enemy : enemies) {
 		enemy->render(*window);
 	}

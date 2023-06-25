@@ -11,7 +11,7 @@ public:
     CollisionHandler(Game& game);
 
 	void checkPlayerEnemyCollision(PlayerShip& player, EnemyShip& enemy);
-	//void checkShotBorderCollision(Shot& shot);
+	void checkShotBorderCollision(Shot& shot);
 	void checkShipBorderCollision(EnemyShip& ship);
 	void checkShipBorderCollision(PlayerShip& ship);
 	//void checkShotShipCollision(Shot& shot, PlayerShip& ship);

@@ -19,6 +19,7 @@
 #include "enums/shared_state.h"
 #include "player_ship.h"
 #include "score_panel.h"
+#include "shot.h"
 
 class Game {
 public:
@@ -47,6 +48,7 @@ private:
 	// TODO: make a class for enemy
 	std::vector<std::unique_ptr<EnemyShip>> enemies;
 	std::unique_ptr<PlayerShip> player;
+
 	//vector<Shot&> shots;
 	sf::Texture maze_tex;
 	sf::Sprite maze_sprite;
