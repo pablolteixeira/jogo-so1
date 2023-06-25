@@ -12,9 +12,11 @@ public:
     ~Shot();
     static void updateShots(float dt);
     static void renderShots(sf::RenderWindow& window);
+    static void cleanUpShots();
 	void die();
     
     sf::Sprite sprite;
+    bool isDead;
     static std::vector<Shot*> _shots;
     ShipType ship_type;
 

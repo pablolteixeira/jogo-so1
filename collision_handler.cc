@@ -103,10 +103,9 @@ void CollisionHandler::checkShotShipCollision(Shot& shot, PlayerShip& ship) {
 void CollisionHandler::checkShotShipCollision(Shot& shot, PlayerShip& playerShip, EnemyShip& enemyShip) {
 	if (shot.sprite.getGlobalBounds().intersects(enemyShip.sprite.getGlobalBounds()) &&
 			shot.ship_type == ShipType::PLAYER &&
-			enemyShip.isAlive) { 
-		std::cout << "shoulda died fr\n";
-		shot.die();
+			enemyShip.isAlive && !shot.isDead) { 		
 		enemyShip.die();
+        shot.die();
         
         playerShip.increaseScore();
 	}

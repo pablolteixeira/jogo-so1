@@ -83,6 +83,7 @@ void Game::update(float dt) {
 			collision_handler.checkShotShipCollision(*shot, *player, *enemy);
 		}
 	}
+	Shot::cleanUpShots();
 
 	score_panel.update(player->lives, player->score, wave_velocity);
 }
