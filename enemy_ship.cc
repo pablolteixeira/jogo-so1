@@ -70,7 +70,7 @@ sf::FloatRect EnemyShip::getBoundaryRectangle(const sf::Vector2f& newPosition) {
 }
 
 void EnemyShip::update(float dt, Game& game, sf::Vector2u window_size, int velocity) {
-	speed = init_speed + velocity * 30.f;	
+	speed = init_speed + (velocity+1.5f) * 15.f;	
 
 	if (!isAlive) {
 		if (deathClock.getElapsedTime().asSeconds() >= 2.f) {
