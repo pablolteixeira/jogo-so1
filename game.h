@@ -1,6 +1,7 @@
 #ifndef game_h
 #define game_h
 
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -38,6 +39,9 @@ private:
 	SharedState shared_state;
 	ScorePanel score_panel;
 
+	sf::RectangleShape left_frame;
+	sf::RectangleShape right_frame;
+
 	// TODO: make a class for enemy
 	std::vector<std::unique_ptr<EnemyShip>> enemies;
 	std::unique_ptr<PlayerShip> player;
@@ -45,6 +49,7 @@ private:
 	sf::Texture maze_tex;
 	sf::Sprite maze_sprite;
 
+	void initFrames();
 	void initWindow();
 	void initVariables();
 	void initEnemies();

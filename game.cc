@@ -3,6 +3,7 @@
 #include "player_ship.h"
 #include "score_panel.h"
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <iostream>
@@ -14,6 +15,7 @@ Game::Game(SharedState& state) : score_panel() {
 	initWindow();
 	initEnemies();
 	initMaze();
+	initFrames();
 
 	shared_state = state;
 	shared_state.running = true;
@@ -21,6 +23,24 @@ Game::Game(SharedState& state) : score_panel() {
 
 Game::~Game() {
 	delete this->window;
+}
+
+void Game::initFrames() {
+	// Left part
+    left_frame = sf::RectangleShape(sf::Vector2f(window->getSize().x * 2.f / 3.f, window->getSize().y));
+    left_frame.setFillColor(sf::Color::Black);
+    left_frame.setOutlineThickness(2); // Border thickness
+    left_frame.setOutlineColor(sf::Color::Red); // Border color
+
+    // Right part
+    right_frame = sf::RectangleShape(sf::Vector2f(window->getSize().x / 3.f, window->getSize().y));
+    right_frame.setPosition(sf::Vector2f(window->getSize().x * 2.f / 3.f, 0));
+    right_frame.setFillColor(sf::Color::Black);
+    right_frame.setOutlineThickness(2); // Border thickness
+    right_frame.setOutlineColor(sf::Color::Blue); // Border color
+
+    window->draw(right_frame);
+    window->draw(left_frame);
 }
 
 void Game::initMaze()
@@ -50,6 +70,9 @@ void Game::render() {
 	window->clear(sf::Color::White);
 
 	window->draw(maze_sprite); 
+
+	window->draw(right_frame);
+	window->draw(left_frame);
 
 	player->render(*window);
 	for (auto& enemy : enemies) {
