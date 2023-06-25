@@ -9,8 +9,8 @@ void Game::initializeVariables()
 
 void Game::initWindow()
 {
-    this->videoMode.height = 900;
-    this->videoMode.width = 560;
+    this->videoMode.height = 560;
+    this->videoMode.width = 900;
     this->window = new sf::RenderWindow(this->videoMode, "Jogo dos fugayte", sf::Style::Titlebar | sf::Style::Close);
 
     this->window->setFramerateLimit(144);
@@ -81,7 +81,7 @@ void Game::pollEvents()
                 } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
                     std::cout << "Keyboard R!" << std::endl;
                 } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-                    std::cout << "Keyboard para cima!" << std::endl;
+                    std::cout << "Keyboard Space!" << std::endl;
                 } else
                     std::cout << "Keyboard pressed = " << ev.key.code << std::endl;
                 break;
