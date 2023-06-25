@@ -16,6 +16,10 @@ void CollisionHandler::checkPlayerEnemyCollision(PlayerShip& player, EnemyShip& 
 	}
 }
 
+void CollisionHandler::checkEnemyEnemyCollision(EnemyShip& en1, EnemyShip& en2) {
+
+}
+
 void CollisionHandler::checkShipBorderCollision(PlayerShip& ship) {
 	sf::FloatRect shipBounds = ship.sprite.getGlobalBounds();
 	sf::FloatRect frameBounds = game.left_frame.getGlobalBounds();
@@ -47,22 +51,22 @@ void CollisionHandler::checkShipBorderCollision(EnemyShip& ship) {
 
 	// Check if the ship has hit the left frame boundary
     if (shipBounds.left < frameBounds.left) {
-        ship.sprite.setPosition(frameBounds.left + 5, ship.sprite.getPosition().y);
+        ship.sprite.setPosition(frameBounds.left, ship.sprite.getPosition().y);
     }
 	
     // Check if the ship has hit the top frame boundary
     if (shipBounds.top < frameBounds.top) {
-        ship.sprite.setPosition(ship.sprite.getPosition().x, frameBounds.top + 5);
+        ship.sprite.setPosition(ship.sprite.getPosition().x, frameBounds.top);
     }
 	
     // Check if the ship has hit the right frame boundary
     if (shipBounds.left + shipBounds.width > frameBounds.left + frameBounds.width) {
-        ship.sprite.setPosition(frameBounds.left + frameBounds.width - shipBounds.width - 5, ship.sprite.getPosition().y);
+        ship.sprite.setPosition(frameBounds.left + frameBounds.width - shipBounds.width, ship.sprite.getPosition().y);
     }
 	
     // Check if the ship has hit the bottom frame boundary
     if (shipBounds.top + shipBounds.height > frameBounds.top + frameBounds.height) {
-        ship.sprite.setPosition(ship.sprite.getPosition().x, frameBounds.top + frameBounds.height - shipBounds.height - 5);
+        ship.sprite.setPosition(ship.sprite.getPosition().x, frameBounds.top + frameBounds.height - shipBounds.height);
     }
 }
 
