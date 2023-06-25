@@ -8,10 +8,10 @@ LDFLAGS= $(CFLAGS)
 ODIR=.
 LIBS= $(LDLIBS) $(LDFLAGS)
 
-_DEPS = window.h Game.h 
+_DEPS = window.h Game.h Ship.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o window.o Game.o
+_OBJ = main.o window.o Game.o Ship.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.cpp $(DEPS)

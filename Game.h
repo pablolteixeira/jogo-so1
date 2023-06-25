@@ -7,6 +7,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 
+#include "Ship.h"
+
 /*
     Class that acts as the game engine.
     Wrapper class.
@@ -23,34 +25,28 @@ private:
     sf::RenderWindow* window;
     sf::VideoMode videoMode;
     sf::Event ev;
+    
 
     /*
-        Game objects 
+        Game objects
     */
 
+    // Player Ship
+    Ship* playerShip;
+    
     // Maze Texture
     sf::Texture maze_tex;
     sf::Sprite maze_sprite;
-    
-    //Shot texture
-    sf::Texture shot_tex;
-    sf::Sprite shot_sprite;
-    
-    //Space ship texture
-    sf::Texture space_ship_tex;
-    sf::Sprite space_ship_sprite;
-
-    //Enemy space ship texture
-    sf::Texture enemy_ship_tex;
-    sf::Sprite enemy_ship_sprite;
 
     /*
         Private functions
     */
-
+   
     void initializeVariables();
     void initWindow();
-    void initEnemies();
+    void initMaze();
+    void initPlayerShip();
+    //void initEnemies();
 
 public: 
     // Constructors / Destructors

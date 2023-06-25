@@ -16,23 +16,16 @@ void Game::initWindow()
     this->window->setFramerateLimit(144);
 }
 
-void Game::initEnemies()
+void Game::initMaze()
 {
-    maze_tex.loadFromFile("sprites/maze/screen.png");
-    maze_sprite.setTexture(maze_tex);
-    maze_sprite.scale(1.5, 1.5);
+    this->maze_tex.loadFromFile("sprites/maze/screen.png");
+    this->maze_sprite.setTexture(maze_tex);
+    this->maze_sprite.scale(1.5, 1.5);
+}
 
-    shot_tex.loadFromFile("sprites/space_ships/shot.png");
-    shot_sprite.setTexture(shot_tex);
-    shot_sprite.scale(-0.5, -0.5);
-
-    space_ship_tex.loadFromFile("sprites/space_ships/space_ship1.png");
-    space_ship_sprite.setTexture(space_ship_tex);
-    space_ship_sprite.scale(-0.5, -0.5);
-
-    enemy_ship_tex.loadFromFile("sprites/space_ships/enemy_space_ship1.png");
-    enemy_ship_sprite.setTexture(enemy_ship_tex);
-    enemy_ship_sprite.scale(-0.5, -0.5);
+void Game::initPlayerShip()
+{
+    this->playerShip = new Ship();
 }
 
 // Constructors / Destructors
@@ -40,7 +33,9 @@ Game::Game()
 {   
     this->initializeVariables();
     this->initWindow();
-    this->initEnemies();
+    this->initMaze();
+    this->initPlayerShip();
+    //this->initEnemies();
 }
 
 Game::~Game()
@@ -66,6 +61,10 @@ void Game::pollEvents()
             
             // key pressed
             case sf::Event::KeyPressed:
+                sf::Keyboard::Key keyPressed = ev.key.code;
+
+                this->playerShip->move(keyPressed);
+
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                     std::cout << "Keyboard esquerda!" << std::endl;
                 } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
@@ -102,7 +101,11 @@ void Game::render()
     // Draw game objects
 
     this->window->draw(maze_sprite);
-        
+    
+    
+    this->window->draw(this->playerShip->getShipSprite());
+
+    /*
     space_ship_sprite.setPosition(220, 365);
     this->window->draw(space_ship_sprite);
     
@@ -111,6 +114,7 @@ void Game::render()
 
     shot_sprite.setPosition(204, 400);
     this->window->draw(shot_sprite);
+    */
 
     this->window->display();
 }   
