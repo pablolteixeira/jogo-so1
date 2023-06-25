@@ -15,7 +15,7 @@ public:
 	void checkShipBorderCollision(EnemyShip& ship);
 	void checkShipBorderCollision(PlayerShip& ship);
 	void checkShotShipCollision(Shot& shot, PlayerShip& ship);
-	void checkShotShipCollision(Shot& shot, EnemyShip& ship);
+	void checkShotShipCollision(Shot& shot, PlayerShip& playerShip, EnemyShip& enemyShip);
 
     // Other necessary functions and members for collision handling
 private:

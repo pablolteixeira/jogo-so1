@@ -75,7 +75,7 @@ void Game::update(float dt) {
 	for (Shot* shot : Shot::_shots) {
 		collision_handler.checkShotShipCollision(*shot, *player);	
 		for (auto& enemy : enemies) {
-			collision_handler.checkShotShipCollision(*shot, *enemy);
+			collision_handler.checkShotShipCollision(*shot, *player, *enemy);
 		}
 	}
 

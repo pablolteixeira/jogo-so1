@@ -113,6 +113,10 @@ void PlayerShip::getUserInput() {
     }
 }
 
+void PlayerShip::increaseScore() {
+	this->score += 100;
+}
+
 void PlayerShip::move(float dt) {
 	sprite.move(directionVector * speed * dt);
 }

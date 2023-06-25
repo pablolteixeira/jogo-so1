@@ -17,6 +17,7 @@ public:
     void updateShots();
     void render(sf::RenderWindow& window);
     void renderShots(sf::RenderWindow& window);
+    void increaseScore();
 	sf::Vector2f getPosition() { return sprite.getPosition(); };	
     sf::Sprite sprite;
 	int lives = 3;
