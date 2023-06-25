@@ -22,6 +22,7 @@ Game::Game(SharedState& state) : score_panel(), collision_handler(*this) {
 
 	shared_state = state;
 	shared_state.running = true;
+	this->isPaused = false;
 }
 
 Game::~Game() {
@@ -59,7 +60,7 @@ const bool Game::running() const {
 	return window->isOpen();
 }
 
-void Game::update(float dt) {
+void Game::update(float dt) {	
 	player->update(dt);
 	Shot::updateShots(dt);
 	collision_handler.checkShipBorderCollision(*player);
@@ -119,7 +120,6 @@ void Game::handleEvents() {
 	while (window->pollEvent(ev)) {
 		switch (ev.type) {
 			case sf::Event::Closed:
-				//end();
 				window->close();
 				break;
 			case sf::Event::KeyPressed:
@@ -127,6 +127,24 @@ void Game::handleEvents() {
 				break;
 			default:
 				break;
+		}
+	}
+}
+
+void Game::handleInput() {
+	sf::Keyboard::Key key;
+	if (input.tryPopKey(key)) {
+		if (key == sf::Keyboard::Up || key == sf::Keyboard::Down || 
+			key == sf::Keyboard::Left || key == sf::Keyboard::Right ||
+			key == sf::Keyboard::Space) 
+		{
+			this->player->getUserInput(key);
+		} else if (key == sf::Keyboard::P) {
+			this->isPaused = !this->isPaused;
+		} else if (key == sf::Keyboard::Q) {
+			this->window->close();
+		} else if (key == sf::Keyboard::R) {
+			
 		}
 	}
 }

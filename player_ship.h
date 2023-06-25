@@ -18,6 +18,7 @@ public:
     void render(sf::RenderWindow& window);
     void renderShots(sf::RenderWindow& window);
     void increaseScore();
+	void getUserInput(sf::Keyboard::Key key);
 	sf::Vector2f getPosition() { return sprite.getPosition(); };	
     sf::Sprite sprite;
 	int lives = 3;
@@ -37,7 +38,6 @@ private:
 	//Input keyboard_input;
     //Shot shot; // Assumption: Shot class for the shots fired by the enemy
     
-	void getUserInput();
     void move(float dt);
     void shoot();
 	void changeDirection(Direction direction);

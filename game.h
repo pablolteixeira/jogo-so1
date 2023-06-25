@@ -28,6 +28,7 @@ public:
 	void update(float dt);
 	void render();
 	void handleEvents();
+	void handleInput();
 	void updateVelocityCounter();
 	int velocity_counter = 0;
 	int wave_velocity = 1;
@@ -38,7 +39,7 @@ public:
 
 	sf::RectangleShape left_frame;
 	sf::RectangleShape right_frame;
-
+	bool isPaused;
 private:
 	sf::RenderWindow *window;
 	sf::Event ev;

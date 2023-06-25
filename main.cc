@@ -7,9 +7,14 @@ int main() {
 
 	while (game.running()) {
 		game.handleEvents();
+		game.handleInput();
+
 		sf::Time dt = game.clock.restart();
-		game.update(dt.asSeconds());
-		game.render();
+
+		if (!game.isPaused) {
+			game.update(dt.asSeconds());
+			game.render();
+		}
 	}
 
 	return 0;

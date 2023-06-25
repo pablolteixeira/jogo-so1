@@ -79,7 +79,6 @@ void PlayerShip::changeDirection(Direction direction) {
 
 
 void PlayerShip::update(float dt) {
-	getUserInput();	
 	move(dt);
 }
 
@@ -87,30 +86,27 @@ void PlayerShip::render(sf::RenderWindow& window) {
     window.draw(this->sprite);
 }
 
-void PlayerShip::getUserInput() {
-    sf::Keyboard::Key key;
-    while (input.tryPopKey(key)) {
-        switch(key) {
-            case sf::Keyboard::Up:
-				changeDirection(Direction::UP);
-                break;
-            case sf::Keyboard::Down:
-				changeDirection(Direction::DOWN);
-                break;
-            case sf::Keyboard::Left:
-				changeDirection(Direction::LEFT);
-                break;
-            case sf::Keyboard::Right:
-				changeDirection(Direction::RIGHT);
-                break;
-			case sf::Keyboard::Space:
-				shoot();
-				break;
-            // TODO: Handle shooting, pausing, restarting, quitting as necessary
-            default:
-                break;
-        }
-    }
+void PlayerShip::getUserInput(sf::Keyboard::Key key) {
+	switch(key) {
+		case sf::Keyboard::Up:
+			changeDirection(Direction::UP);
+			break;
+		case sf::Keyboard::Down:
+			changeDirection(Direction::DOWN);
+			break;
+		case sf::Keyboard::Left:
+			changeDirection(Direction::LEFT);
+			break;
+		case sf::Keyboard::Right:
+			changeDirection(Direction::RIGHT);
+			break;
+		case sf::Keyboard::Space:
+			shoot();
+			break;
+		// TODO: Handle shooting, pausing, restarting, quitting as necessary
+		default:
+			break;
+	}
 }
 
 void PlayerShip::increaseScore() {

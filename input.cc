@@ -8,7 +8,8 @@ void Input::pushEvent(const sf::Event::KeyEvent& event) {
     if (event.code == sf::Keyboard::Up || event.code == sf::Keyboard::Down ||
         event.code == sf::Keyboard::Left || event.code == sf::Keyboard::Right ||
         event.code == sf::Keyboard::P || event.code == sf::Keyboard::Q ||
-        event.code == sf::Keyboard::R || event.code == sf::Keyboard::Space) {
+        event.code == sf::Keyboard::R || event.code == sf::Keyboard::Space) 
+    {
         key_event_queue.push(event.code);
     }
 }
