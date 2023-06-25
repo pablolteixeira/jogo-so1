@@ -60,38 +60,15 @@ void Game::initVariables() {
 	this->window = nullptr;
 }
 
-std::map<sf::Keyboard::Key, std::string> keyMap = {
-	{sf::Keyboard::Unknown, "Unknown"},
-    {sf::Keyboard::A, "A"},
-    {sf::Keyboard::B, "B"},
-    {sf::Keyboard::Up, "Up"},
-    {sf::Keyboard::Down, "Down"},
-    {sf::Keyboard::Left, "Left"},
-    {sf::Keyboard::Right, "Right"},
-    {sf::Keyboard::Space, "Space"},
-    {sf::Keyboard::P, "P"},
-    {sf::Keyboard::Q, "Q"},
-    {sf::Keyboard::R, "R"},
-    //...
-};
-
 void Game::handleEvents() {
 	while (window->pollEvent(ev)) {
 		switch (ev.type) {
 			case sf::Event::Closed:
-				printf("polling event -- closed \n");
 				//end();
 				window->close();
 				break;
 			case sf::Event::KeyPressed:
-				printf("polling event -- key pressed\n");
-				if (keyMap.find(ev.key.code) != keyMap.end()) {
-					printf("Key name: %s\n", keyMap[ev.key.code].c_str());
-				} else {
-					printf("Key name: Unknown\n");
-				}
 				input.pushEvent(ev.key);
-				printf("is input empty? %d\n", input.key_event_queue.empty());
 				break;
 			default:
 				break;

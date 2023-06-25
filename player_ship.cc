@@ -54,51 +54,26 @@ void PlayerShip::render(sf::RenderWindow& window) {
     window.draw(this->sprite);
 }
 
-std::map<sf::Keyboard::Key, std::string> keyMapplayer = {
-	{sf::Keyboard::Unknown, "Unknown"},
-    {sf::Keyboard::A, "A"},
-    {sf::Keyboard::B, "B"},
-    {sf::Keyboard::Up, "Up"},
-    {sf::Keyboard::Down, "Down"},
-    {sf::Keyboard::Left, "Left"},
-    {sf::Keyboard::Right, "Right"},
-    {sf::Keyboard::Space, "Space"},
-    {sf::Keyboard::P, "P"},
-    {sf::Keyboard::Q, "Q"},
-    {sf::Keyboard::R, "R"},
-    //...
-};
-
 void PlayerShip::getUserInput() {
     sf::Keyboard::Key key;
     while (input.tryPopKey(key)) {
-		printf("trypopkey");
-		if (keyMapplayer.find(key) != keyMapplayer.end()) {
-			printf("Key name: %s\n", keyMapplayer[key].c_str());
-		} else {
-			printf("Key name: Unknown\n");
-		}
         switch(key) {
             case sf::Keyboard::Up:
-				printf("key press up\n");
 				texture = textures[0];
 				sprite.setTexture(texture);
 				move(0.f, -20.f);
                 break;
             case sf::Keyboard::Down:
-				printf("key press down\n");
 				texture = textures[2];
 				sprite.setTexture(texture);
 				move(0.f, 20.f);
                 break;
             case sf::Keyboard::Left:
-				printf("key press left\n");
 				texture = textures[1];
 				sprite.setTexture(texture);
 				move(-20.f, 0.f);
                 break;
             case sf::Keyboard::Right:
-				printf("key press right\n");
 				texture = textures[3];
 				sprite.setTexture(texture);
 				move(20.f, 0.f);
