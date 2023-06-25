@@ -1,5 +1,6 @@
 #include "game.h"
 #include "collision_handler.h"
+#include "enums/algorithm.h"
 #include "enums/direction.h"
 #include "player_ship.h"
 #include "score_panel.h"
@@ -141,8 +142,12 @@ void Game::initEnemies() {
 		Direction::DOWN, Direction::DOWN, Direction::UP, Direction::UP
 	};
 
+	std::vector<Algorithm> algorithms = {
+		Algorithm::FOLLOW_PLAYER, Algorithm::SNIPER
+	};
+
 	for (int i = 0; i < 4; i++) {
-		std::unique_ptr<EnemyShip> enemy = std::make_unique<EnemyShip>(positions[i], directions[i], player.get());
+		std::unique_ptr<EnemyShip> enemy = std::make_unique<EnemyShip>(positions[i], directions[i], player.get(), algorithms[i % 2]);
 		enemies.push_back(std::move(enemy));
 	}
 	std::cout << "end -- initenemies\n";

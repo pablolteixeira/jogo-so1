@@ -1,7 +1,9 @@
 #ifndef enemy_ship_h
 #define enemy_ship_h
 
+#include "enums/algorithm.h"
 #include <SFML/Graphics/Rect.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 class Game;
 
 #include <SFML/Graphics.hpp>
@@ -12,7 +14,7 @@ class Game;
 
 class EnemyShip {
 public:
-    EnemyShip(sf::Vector2f position, Direction direction, PlayerShip* player);
+    EnemyShip(sf::Vector2f position, Direction direction, PlayerShip* player, Algorithm algo);
     ~EnemyShip();
     sf::Sprite sprite;
     void update(float dt, Game& game);
@@ -27,16 +29,20 @@ private:
     float speed;
     float shootDelay = 2.f;
     float shootTimer = 0.f;
-	float shootSpeed = 180.f;
+	float shootSpeed = 260.f;
     sf::Texture texture;
 	PlayerShip *player;
-    //Shot shot; // Assumption: Shot class for the shots fired by the enemy
+
+	Algorithm algo;
+	sf::Clock randomMoveClock;  
+    sf::Vector2f randomDirection;  
     
-    void move(float dt);
+    void move(float dt, sf::RectangleShape left_frame);
     void shoot();
 	void updateDirection();
-	sf::FloatRect getBoundaryRectangle(const sf::Vector2f& newPosition);
+	void updateSprite();
 
+	sf::FloatRect getBoundaryRectangle(const sf::Vector2f& newPosition);
 	sf::Clock deathClock;
 };
 
