@@ -16,6 +16,10 @@ void CollisionHandler::checkPlayerEnemyCollision(PlayerShip& player, EnemyShip& 
 	}
 }
 
+void CollisionHandler::checkEnemyEnemyCollision(EnemyShip& en1, EnemyShip& en2) {
+
+}
+
 void CollisionHandler::checkShipBorderCollision(PlayerShip& ship) {
 	sf::FloatRect shipBounds = ship.sprite.getGlobalBounds();
 	sf::FloatRect frameBounds = game.left_frame.getGlobalBounds();

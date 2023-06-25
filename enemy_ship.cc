@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+<<<<<<< HEAD
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -6,18 +7,30 @@
 #include "enemy_ship.h"
 #include "enums/algorithm.h"
 #include "enums/direction.h"
+=======
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Vector2.hpp>
+#include "collision_handler.h"
+#include "enemy_ship.h"
+#include "enums/movement_algorithm.h"
+>>>>>>> 004d195 (I don't remmeber what i did here)
 #include "player_ship.h"
 #include <iostream>
 #include <math.h>
 #include "game.h"
 #include "shot.h"
 
+<<<<<<< HEAD
 EnemyShip::EnemyShip(sf::Vector2f position, Direction direction, PlayerShip* player, Algorithm algo) : algo(algo) {
     // Load the texture, set initial direction, speed, etc.
+=======
+EnemyShip::EnemyShip(sf::Vector2f position, Direction direction, PlayerShip* player, MovementAlgorithm algorithm) {
+>>>>>>> 004d195 (I don't remmeber what i did here)
     if (!texture.loadFromFile("sprites/space_ships/enemy_space_ship1.png")) {
         exit(1);
     }
 
+	this->algorithm = algorithm;
 	this->player = player;
 
 	switch (direction) {
@@ -69,7 +82,7 @@ sf::FloatRect EnemyShip::getBoundaryRectangle(const sf::Vector2f& newPosition) {
 	return sf::FloatRect(centeredPosition, sf::Vector2f(texture.getSize().x * sprite.getScale().x, texture.getSize().y * sprite.getScale().y));
 }
 
-void EnemyShip::update(float dt, Game& game) {
+void EnemyShip::update(float dt, Game& game, sf::Vector2u window_size) {
 	if (!isAlive) {
 		if (deathClock.getElapsedTime().asSeconds() >= 2.f) {
 			if (algo == Algorithm::SNIPER) {
@@ -181,6 +194,7 @@ void EnemyShip::move(float dt, sf::RectangleShape left_frame) {
 				sf::FloatRect shipBounds = sprite.getGlobalBounds();
 				sf::FloatRect frameBounds = left_frame.getGlobalBounds();
 
+<<<<<<< HEAD
 				directionVector.y = 0.f;
                 
                 if (randomMoveClock.getElapsedTime().asSeconds() == 0.f) {
@@ -223,6 +237,55 @@ void EnemyShip::updateSprite() {
         	texture.loadFromFile("sprites/space_ships/enemy_space_ship1.png");
 			break;
 	}	
+=======
+            sprite.setPosition(newPosition);
+            isAlive = true;
+        }
+    } else {  
+        this->move(dt, window_size);
+        shootTimer += dt;
+        if (shootTimer > shootDelay) {
+            shootTimer = 0.f;
+            this->shoot();
+        }
+    }
+}
+
+void EnemyShip::move(float dt, sf::Vector2u window_size) {
+	if (algorithm == MovementAlgorithm::FOLLOW_PLAYER) {
+		// Previous movement algorithm
+		sf::Vector2f playerPosition = player->getPosition();
+		sf::Vector2f currentPosition = sprite.getPosition();
+		sf::Vector2f directionToPlayer = playerPosition - currentPosition;
+
+		float magnitude = sqrt((directionToPlayer.x * directionToPlayer.x) + (directionToPlayer.y * directionToPlayer.y));
+		direction = sf::Vector2f(directionToPlayer.x / magnitude, directionToPlayer.y / magnitude);
+
+		updateDirection();
+	} else if (algorithm == MovementAlgorithm::RANDOM_MOVEMENT) {
+		if (moveClock.getElapsedTime().asSeconds() >= 2.f) {
+			randomDirection = sf::Vector2f(rand() % 3 - 1, rand() % 3 - 1);  // Gives random values between -1 and 1
+			moveClock.restart();
+		} else if (sprite.getPosition().x <= 0) {
+			// Hitting left wall, reflect off the x axis
+			randomDirection = sf::Vector2f(abs(randomDirection.x), randomDirection.y);
+		} else if (sprite.getPosition().x >= window_size.x) {
+			// Hitting right wall, reflect off the x axis
+			randomDirection = sf::Vector2f(-abs(randomDirection.x), randomDirection.y);
+		} else if (sprite.getPosition().y <= 0) {
+			// Hitting top wall, reflect off the y axis
+			randomDirection = sf::Vector2f(randomDirection.x, abs(randomDirection.y));
+		} else if (sprite.getPosition().y >= window_size.y) {
+			// Hitting bottom wall, reflect off the y axis
+			randomDirection = sf::Vector2f(randomDirection.x, -abs(randomDirection.y));
+		}
+
+		direction = randomDirection;
+		updateDirection();
+	}
+
+	sprite.move(direction * speed * dt);
+>>>>>>> 004d195 (I don't remmeber what i did here)
 }
 
 void EnemyShip::updateDirection() {
