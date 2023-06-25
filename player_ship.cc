@@ -37,6 +37,7 @@ PlayerShip::PlayerShip(sf::Vector2f position, Direction shipDirection, SharedSta
 
 	sprite.setTexture(texture);
 	sprite.setScale(0.5f, 0.5f);
+	this->position = position;
 	sprite.setPosition(position);
 
 	speed = 150.f;
