@@ -14,9 +14,9 @@
 Game::Game(SharedState& state) : score_panel(), collision_handler(*this) {
 	initVariables();
 	initWindow();
-	initEnemies();
 	initMaze();
 	initFrames();
+	initEnemies();
 
 	shared_state = state;
 	shared_state.running = true;
@@ -63,7 +63,9 @@ void Game::update(float dt) {
 	collision_handler.checkShipBorderCollision(*player);
 
 	for (auto& enemy : enemies) {
-		enemy->update(dt);	
+		enemy->update(dt);
+		collision_handler.checkPlayerEnemyCollision(*player, *enemy);
+		collision_handler.checkShipBorderCollision(*enemy);
 	}
 
 	score_panel.update(player->lives, player->score, wave_velocity);
@@ -115,6 +117,7 @@ void Game::initWindow() {
 }
 
 void Game::initEnemies() {
+	std::cout << "INITENEMIES\n";
 	std::vector<sf::Vector2f> positions = {
 		sf::Vector2f(100.f, 100.f),
 		sf::Vector2f(700.f, 100.f), 
@@ -127,11 +130,9 @@ void Game::initEnemies() {
 	};
 
 	for (int i = 0; i < 4; i++) {
-		std::unique_ptr<EnemyShip> enemy = std::make_unique<EnemyShip>(positions[i], directions[i]);
+		std::unique_ptr<EnemyShip> enemy = std::make_unique<EnemyShip>(positions[i], directions[i], player.get());
 		enemies.push_back(std::move(enemy));
 	}
+	std::cout << "end -- initenemies\n";
 }
-
-
-
 

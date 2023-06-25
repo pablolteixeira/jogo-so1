@@ -14,10 +14,10 @@ public:
     ~PlayerShip();
     void update();
     void render(sf::RenderWindow& window);
+	sf::Vector2f getPosition() { return sprite.getPosition(); };	
     sf::Sprite sprite;
 	int lives = 3;
 	int score = 0;
-	//void run();
     
 private:
     float speed;
