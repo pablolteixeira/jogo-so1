@@ -45,7 +45,7 @@ EnemyShip::EnemyShip(sf::Vector2f position, Direction direction, PlayerShip* pla
     sprite.setScale(0.5, 0.5);
 	sprite.setPosition(position);
     
-    speed = 85.f; // Arbitrary speed value
+    speed = init_speed; // Arbitrary speed value
     shootDelay = 2.f; // Fire every 2 seconds
     shootTimer = 0.f;
 }
@@ -69,7 +69,9 @@ sf::FloatRect EnemyShip::getBoundaryRectangle(const sf::Vector2f& newPosition) {
 	return sf::FloatRect(centeredPosition, sf::Vector2f(texture.getSize().x * sprite.getScale().x, texture.getSize().y * sprite.getScale().y));
 }
 
-void EnemyShip::update(float dt, Game& game, sf::Vector2u window_size) {
+void EnemyShip::update(float dt, Game& game, sf::Vector2u window_size, int velocity) {
+	speed = init_speed + (velocity+1.5f) * 15.f;	
+
 	if (!isAlive) {
 		if (deathClock.getElapsedTime().asSeconds() >= 2.f) {
 			if (algo == Algorithm::SNIPER) {
@@ -145,7 +147,6 @@ void EnemyShip::update(float dt, Game& game, sf::Vector2u window_size) {
 					}
 				}
 
-				std::cout << "position follow player\n";
 				sprite.setPosition(newPosition);
 				isAlive = true;
 			}
@@ -188,12 +189,10 @@ void EnemyShip::move(float dt, sf::RectangleShape left_frame) {
                 }
 
                 if (shipBounds.left <= frameBounds.left) {
-					std::cout <<"HIT LEFT WALL!\n";
                     directionVector.x = 1.f;  // Move to the right
                     randomMoveClock.restart();
                 }
                 else if (shipBounds.left + shipBounds.width >= frameBounds.left + frameBounds.width) {
-					std::cout << "HIT RIGHT WALL!\n";
                     directionVector.x = -1.f;  // Move to the left
                     randomMoveClock.restart();
                 }

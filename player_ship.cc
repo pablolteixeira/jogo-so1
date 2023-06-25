@@ -42,7 +42,7 @@ PlayerShip::PlayerShip(sf::Vector2f position, Direction shipDirection, SharedSta
 	this->sprite.setScale(0.5f, 0.5f);
 	this->sprite.setPosition(position);
 
-	this->speed = 150.f;
+	this->speed = 180.f;
 	this->shootDelay = 0.5f;
 	this->shootTimer = 0.f;
 }
