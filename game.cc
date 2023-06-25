@@ -72,6 +72,9 @@ void Game::update(float dt) {
 		enemy->update(dt, *this, window->getSize());
 		collision_handler.checkPlayerEnemyCollision(*player, *enemy);
 		collision_handler.checkShipBorderCollision(*enemy);
+		for (auto& enemy2 : enemies) {
+			collision_handler.checkEnemyEnemyCollision(*enemy, *enemy2);
+		}
 	}
 
 	for (Shot* shot : Shot::_shots) {

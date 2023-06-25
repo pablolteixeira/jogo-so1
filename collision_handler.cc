@@ -4,6 +4,7 @@
 #include "player_ship.h"
 #include "game.h"
 #include <vector>
+#include <math.h>
 #include <iostream>
 
 CollisionHandler::CollisionHandler(Game& game) : game(game) {
@@ -17,7 +18,28 @@ void CollisionHandler::checkPlayerEnemyCollision(PlayerShip& player, EnemyShip& 
 }
 
 void CollisionHandler::checkEnemyEnemyCollision(EnemyShip& en1, EnemyShip& en2) {
+    if (en1.isAlive && en2.isAlive && en1.sprite.getGlobalBounds().intersects(en2.sprite.getGlobalBounds())) {
+        // Calculate the move direction for each enemy
+        sf::Vector2f moveDirection1 = en1.sprite.getPosition() - en2.sprite.getPosition();
+        sf::Vector2f moveDirection2 = -moveDirection1;
 
+        // Normalize the move direction
+        float length1 = std::sqrt(moveDirection1.x * moveDirection1.x + moveDirection1.y * moveDirection1.y);
+        if (length1 != 0) {
+            moveDirection1.x /= length1;
+            moveDirection1.y /= length1;
+        }
+
+        float length2 = std::sqrt(moveDirection2.x * moveDirection2.x + moveDirection2.y * moveDirection2.y);
+        if (length2 != 0) {
+            moveDirection2.x /= length2;
+            moveDirection2.y /= length2;
+        }
+
+        // Move the enemies apart
+        en1.sprite.move(moveDirection1);
+        en2.sprite.move(moveDirection2);
+    }
 }
 
 void CollisionHandler::checkShipBorderCollision(PlayerShip& ship) {
