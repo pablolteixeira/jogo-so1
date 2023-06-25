@@ -1,7 +1,9 @@
 #include "collision_handler.h"
 #include "enemy_ship.h"
+#include "enums/ship_type.h"
 #include "player_ship.h"
 #include "game.h"
+#include <vector>
 #include <iostream>
 
 CollisionHandler::CollisionHandler(Game& game) : game(game) {
@@ -64,28 +66,37 @@ void CollisionHandler::checkShipBorderCollision(EnemyShip& ship) {
     }
 }
 
-void CollisionHandler::checkShotBorderCollision(Shot& shot) {
-    sf::FloatRect shotBounds = shot.sprite.getGlobalBounds();
-	sf::FloatRect frameBounds = game.left_frame.getGlobalBounds();
+void CollisionHandler::checkShotShipCollision(Shot& shot, PlayerShip& ship) {
+	if (shot.sprite.getGlobalBounds().intersects(ship.sprite.getGlobalBounds()) &&
+			shot.ship_type != ShipType::PLAYER) {
+		shot.die();
+		ship.lives--;
+	}
+}
 
-    // Check if the ship has hit the left frame boundary
-    if (shotBounds.left < frameBounds.left) {
-        delete shot;
-    }
-	
-    // Check if the ship has hit the top frame boundary
-    if (shotBounds.top < frameBounds.top) {
-        delete shot;
-    }
-	
-    // Check if the ship has hit the right frame boundary
-    if (shotBounds.left + shotBounds.width > frameBounds.left + frameBounds.width) {
-        delete shot;
-    }
-	
-    // Check if the ship has hit the bottom frame boundary
-    if (shotBounds.top + shotBounds.height > frameBounds.top + frameBounds.height) {
-        delete shot;
+void CollisionHandler::checkShotShipCollision(Shot& shot, EnemyShip& ship) {
+	if (shot.sprite.getGlobalBounds().intersects(ship.sprite.getGlobalBounds()) &&
+			shot.ship_type != ShipType::ENEMY &&
+			ship.isAlive) { 
+		shot.die();
+		ship.die();
+	}
+}
+
+void CollisionHandler::checkShotBorderCollision(Shot& shot) {
+	for (auto it = Shot::_shots.begin(); it != Shot::_shots.end();) {
+		sf::FloatRect shotBounds = (*it)->sprite.getGlobalBounds();
+		sf::FloatRect frameBounds = game.left_frame.getGlobalBounds();
+
+        // Check if the shot has hit any frame boundary
+        if (shotBounds.left < frameBounds.left ||
+            shotBounds.top < frameBounds.top ||
+            shotBounds.left + shotBounds.width > frameBounds.left + frameBounds.width ||
+            shotBounds.top + shotBounds.height > frameBounds.top + frameBounds.height) {
+            it = Shot::_shots.erase(it);
+        } else {
+            ++it;
+        }
     }
 }
 

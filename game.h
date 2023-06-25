@@ -32,6 +32,7 @@ public:
 
 	sf::Clock clock;
 	const bool running() const;
+	std::vector<std::unique_ptr<EnemyShip>> enemies;
 
 	sf::RectangleShape left_frame;
 	sf::RectangleShape right_frame;
@@ -45,8 +46,6 @@ private:
 	ScorePanel score_panel;
 	CollisionHandler collision_handler;
 
-	// TODO: make a class for enemy
-	std::vector<std::unique_ptr<EnemyShip>> enemies;
 	std::unique_ptr<PlayerShip> player;
 
 	//vector<Shot&> shots;

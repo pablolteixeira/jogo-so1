@@ -58,8 +58,7 @@ const bool Game::running() const {
 }
 
 void Game::update(float dt) {
-	//player->update(dt);
-	player->update();
+	player->update(dt);
 	Shot::updateShots();
 	collision_handler.checkShipBorderCollision(*player);
 
@@ -68,9 +67,16 @@ void Game::update(float dt) {
 	}
 
 	for (auto& enemy : enemies) {
-		enemy->update(dt);
+		enemy->update(dt, *this);
 		collision_handler.checkPlayerEnemyCollision(*player, *enemy);
 		collision_handler.checkShipBorderCollision(*enemy);
+	}
+
+	for (Shot* shot : Shot::_shots) {
+		collision_handler.checkShotShipCollision(*shot, *player);	
+		for (auto& enemy : enemies) {
+			collision_handler.checkShotShipCollision(*shot, *enemy);
+		}
 	}
 
 	score_panel.update(player->lives, player->score, wave_velocity);

@@ -1,4 +1,5 @@
 #include "player_ship.h"
+#include "enums/direction.h"
 #include "input.h"
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -37,7 +38,6 @@ PlayerShip::PlayerShip(sf::Vector2f position, Direction shipDirection, SharedSta
 
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(0.5f, 0.5f);
-	this->position = position;
 	this->sprite.setPosition(position);
 
 	this->speed = 150.f;
@@ -49,8 +49,36 @@ PlayerShip::~PlayerShip() {
 
 };
 
-void PlayerShip::update() {
+void PlayerShip::changeDirection(Direction direction) {
+	this->direction = direction;
+	switch (direction) {
+		case Direction::UP:
+			this->texture = textures[0];
+			this->sprite.setTexture(texture);
+			directionVector = sf::Vector2f(0.f, -1.f);
+			break;
+		case Direction::DOWN: 
+			this->texture = textures[2];
+			this->sprite.setTexture(texture);
+			directionVector = sf::Vector2f(0.f, 1.f);
+			break;
+		case Direction::LEFT: 
+			this->texture = textures[1];
+			this->sprite.setTexture(texture);
+			directionVector = sf::Vector2f(-1.f, 0.f);
+			break;
+		case Direction::RIGHT:
+			this->texture = textures[3];
+			this->sprite.setTexture(texture);
+			directionVector = sf::Vector2f(1.f, 0.f);
+			break;
+	}
+}
+
+
+void PlayerShip::update(float dt) {
 	getUserInput();	
+	move(dt);
 }
 
 void PlayerShip::render(sf::RenderWindow& window) {
@@ -62,28 +90,16 @@ void PlayerShip::getUserInput() {
     while (input.tryPopKey(key)) {
         switch(key) {
             case sf::Keyboard::Up:
-				this->texture = textures[0];
-				this->sprite.setTexture(texture);
-				this->direction = Direction::UP;
-				move(0.f, -20.f);
+				changeDirection(Direction::UP);
                 break;
             case sf::Keyboard::Down:
-				this->texture = textures[2];
-				this->sprite.setTexture(texture);
-				this->direction = Direction::DOWN;
-				move(0.f, 20.f);
+				changeDirection(Direction::DOWN);
                 break;
             case sf::Keyboard::Left:
-				this->texture = textures[1];
-				this->sprite.setTexture(texture);
-				this->direction = Direction::LEFT;
-				move(-20.f, 0.f);
+				changeDirection(Direction::LEFT);
                 break;
             case sf::Keyboard::Right:
-				this->texture = textures[3];
-				this->sprite.setTexture(texture);
-				this->direction = Direction::RIGHT;
-				move(20.f, 0.f);
+				changeDirection(Direction::RIGHT);
                 break;
 			case sf::Keyboard::Space:
 				shoot();
@@ -92,18 +108,15 @@ void PlayerShip::getUserInput() {
             default:
                 break;
         }
-
-		this->sprite.setPosition(position);
     }
 }
 
-void PlayerShip::move(float x, float y) {
-	this->position.x += x;
-	this->position.y += y;
+void PlayerShip::move(float dt) {
+	sprite.move(directionVector * speed * dt);
 }
 
 void PlayerShip::shoot() {
-	Shot* shot = new Shot(this->position.x, this->position.y, this->direction, ShipType::PLAYER);
+	Shot* shot = new Shot(sprite.getPosition().x, sprite.getPosition().y, this->direction, ShipType::PLAYER);
 	
 	Shot::_shots.push_back(shot);
 }

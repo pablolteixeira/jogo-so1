@@ -1,6 +1,9 @@
 #ifndef enemy_ship_h
 #define enemy_ship_h
 
+#include <SFML/Graphics/Rect.hpp>
+class Game;
+
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -12,11 +15,11 @@ public:
     EnemyShip(sf::Vector2f position, Direction direction, PlayerShip* player);
     ~EnemyShip();
     sf::Sprite sprite;
-    void update(float dt);
+    void update(float dt, Game& game);
     void render(sf::RenderWindow& window);
 	void die();
 
-	bool isAlive;
+	bool isAlive = true;
     
 private:
     sf::Vector2f direction;
@@ -30,6 +33,7 @@ private:
     void move(float dt);
     void shoot();
 	void updateDirection();
+	sf::FloatRect getBoundaryRectangle(const sf::Vector2f& newPosition);
 
 	sf::Clock deathClock;
 };

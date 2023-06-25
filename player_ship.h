@@ -13,7 +13,7 @@ class PlayerShip {
 public:
     PlayerShip(sf::Vector2f position, Direction shipDirection, SharedState& state, Input& input);
     ~PlayerShip();
-    void update();
+    void update(float dt);
     void updateShots();
     void render(sf::RenderWindow& window);
     void renderShots(sf::RenderWindow& window);
@@ -23,11 +23,11 @@ public:
 	int score = 0;
     
 private:
-    float speed;
+    float speed = 75.f;
     float shootDelay;
     float shootTimer;
     Direction direction;
-    sf::Vector2f position;
+	sf::Vector2f directionVector;
     sf::Texture texture;
 	Input& input;
 	SharedState& shared_state;
@@ -37,8 +37,9 @@ private:
     //Shot shot; // Assumption: Shot class for the shots fired by the enemy
     
 	void getUserInput();
-    void move(float x, float y);
+    void move(float dt);
     void shoot();
+	void changeDirection(Direction direction);
 };
 
 #endif
