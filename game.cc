@@ -66,10 +66,14 @@ void Game::update(float dt) {
 
 	for (auto& shot : Shot::_shots) {
 		collision_handler.checkShotBorderCollision(*shot);
+		for (auto& shot2 : Shot::_shots) {
+			if (shot != shot2)
+			collision_handler.checkShotShotCollision(*shot, *shot2);
+		}
 	}
 
 	for (auto& enemy : enemies) {
-		enemy->update(dt, *this, window->getSize());
+		enemy->update(dt, *this, window->getSize(), wave_velocity);
 		collision_handler.checkPlayerEnemyCollision(*player, *enemy);
 		collision_handler.checkShipBorderCollision(*enemy);
 		for (auto& enemy2 : enemies) {
@@ -133,8 +137,18 @@ void Game::initWindow() {
 	window->setFramerateLimit(60);
 }
 
+void Game::updateVelocityCounter() {
+	if (++velocity_counter % 4 == 0) {
+		std::cout << "velocity counter updated " << velocity_counter << std::endl;
+		wave_velocity++;
+		if (wave_velocity > 3) {
+			wave_velocity = 3;
+		}
+	}
+	velocity_counter %= 4;
+}
+
 void Game::initEnemies() {
-	std::cout << "INITENEMIES\n";
 	std::vector<sf::Vector2f> positions = {
 		sf::Vector2f(100.f, 100.f),
 		sf::Vector2f(700.f, 100.f), 
@@ -154,6 +168,5 @@ void Game::initEnemies() {
 		std::unique_ptr<EnemyShip> enemy = std::make_unique<EnemyShip>(positions[i], directions[i], player.get(), algorithms[i % 2]);
 		enemies.push_back(std::move(enemy));
 	}
-	std::cout << "end -- initenemies\n";
 }
 

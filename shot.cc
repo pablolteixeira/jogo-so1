@@ -60,7 +60,6 @@ void Shot::die() {
 	if (it != Shot::_shots.end()) {
 		Shot::_shots.erase(it);
 	}
-	std::cout << "shot died fr\n";
 }
 
 void Shot::updateShots(float dt) {

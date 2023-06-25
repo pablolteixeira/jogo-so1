@@ -28,6 +28,8 @@ public:
 	void update(float dt);
 	void render();
 	void handleEvents();
+	void updateVelocityCounter();
+	int velocity_counter = 0;
 	int wave_velocity = 1;
 
 	sf::Clock clock;

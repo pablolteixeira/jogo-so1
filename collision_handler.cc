@@ -13,6 +13,7 @@ CollisionHandler::CollisionHandler(Game& game) : game(game) {
 void CollisionHandler::checkPlayerEnemyCollision(PlayerShip& player, EnemyShip& enemy) {
 	if (enemy.isAlive && enemy.sprite.getGlobalBounds().intersects(player.sprite.getGlobalBounds())) {
 		enemy.die();
+		game.updateVelocityCounter();
 		player.lives--;
 	}
 }
@@ -100,12 +101,20 @@ void CollisionHandler::checkShotShipCollision(Shot& shot, PlayerShip& ship) {
 	}
 }
 
+void CollisionHandler::checkShotShotCollision(Shot& shot1, Shot& shot2) {
+	if (shot1.sprite.getGlobalBounds().intersects(
+				shot2.sprite.getGlobalBounds())) {
+		shot1.die();
+		shot2.die();
+	}
+}
+
 void CollisionHandler::checkShotShipCollision(Shot& shot, PlayerShip& playerShip, EnemyShip& enemyShip) {
 	if (shot.sprite.getGlobalBounds().intersects(enemyShip.sprite.getGlobalBounds()) &&
 			shot.ship_type == ShipType::PLAYER &&
 			enemyShip.isAlive) { 
-		std::cout << "shoulda died fr\n";
 		shot.die();
+		game.updateVelocityCounter();
 		enemyShip.die();
         
         playerShip.increaseScore();
