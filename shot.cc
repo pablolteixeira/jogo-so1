@@ -1,13 +1,14 @@
 #include "shot.h"
+#include <iostream>
 
 Shot::Shot(float startX, float startY, Direction direction) {
-    position.x = startX;
-    position.y = startY;
-    direction = direction;
+    this->position.x = startX;
+    this->position.y = startY;
+    this->direction = direction;
 
-    texture.loadFromFile("sprites/space_ships/shot.png");
-    sprite.setTexture(texture);
-    sprite.setPosition(position.x, position.y);
+    this->texture.loadFromFile("sprites/space_ships/shot.png");
+    this->sprite.setTexture(this->texture);
+    this->sprite.setPosition(this->position);
 }
 
 Shot::~Shot() {
@@ -18,18 +19,24 @@ void Shot::update() {
     switch (direction)
     {
     case Direction::UP:
-        position.y -= 20.0f;
+        this->position.y -= 20.0f;
         break;
     case Direction::DOWN:
-        position.y += 20.0f;
+        this->position.y += 20.0f;
         break;
     case Direction::RIGHT:
-        position.x += 20.0f;
+        this->position.x += 20.0f;
         break;
     case Direction::LEFT:
-        position.x -= 20.0f;
+        this->position.x -= 20.0f;
         break;
     default:
         break;
     }
+
+    this->sprite.setPosition(this->position);
+}
+
+void Shot::render(sf::RenderWindow& window) {
+    window.draw(this->sprite);
 }

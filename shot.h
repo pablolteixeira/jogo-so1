@@ -10,7 +10,7 @@ public:
     Shot(float startX, float startY, Direction direction);
     ~Shot();
     void update();
-
+    void render(sf::RenderWindow& window);
 private:
     //  Variables
 

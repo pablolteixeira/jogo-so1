@@ -41,7 +41,7 @@ sf::Sprite Ship::getShipSprite()
 
 void Ship::shoot() 
 {
-
+    Shot 
 }
 
 void Ship::move(sf::Keyboard::Key keyPressed)

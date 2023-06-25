@@ -16,6 +16,7 @@ public:
     void update();
     void updateShots();
     void render(sf::RenderWindow& window);
+    void renderShots(sf::RenderWindow& window);
 	sf::Vector2f getPosition() { return sprite.getPosition(); };	
     sf::Sprite sprite;
 	int lives = 3;
@@ -25,12 +26,13 @@ private:
     float speed;
     float shootDelay;
     float shootTimer;
+    Direction direction;
     sf::Vector2f position;
     sf::Texture texture;
 	Input& input;
 	SharedState& shared_state;
 	std::vector<sf::Texture> textures;
-    std::vector<Shot> playerShots;
+    std::vector<Shot*> playerShots;
 	//Input keyboard_input;
     //Shot shot; // Assumption: Shot class for the shots fired by the enemy
     

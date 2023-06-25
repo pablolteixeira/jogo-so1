@@ -45,7 +45,15 @@ PlayerShip::PlayerShip(sf::Vector2f position, Direction shipDirection, SharedSta
 	shootTimer = 0.f;
 }
 
-PlayerShip::~PlayerShip() {};
+PlayerShip::~PlayerShip() {
+	for (auto& shot : playerShots) {
+        delete shot;
+    }
+
+	for (int i = 0; i < playerShots.size(); i++) {
+		playerShots.pop_back();
+	}
+};
 
 void PlayerShip::update() {
 	getUserInput();	
@@ -62,25 +70,30 @@ void PlayerShip::getUserInput() {
             case sf::Keyboard::Up:
 				texture = textures[0];
 				sprite.setTexture(texture);
+				direction = Direction::UP;
 				move(0.f, -20.f);
                 break;
             case sf::Keyboard::Down:
 				texture = textures[2];
 				sprite.setTexture(texture);
+				direction = Direction::DOWN;
 				move(0.f, 20.f);
                 break;
             case sf::Keyboard::Left:
 				texture = textures[1];
 				sprite.setTexture(texture);
+				direction = Direction::LEFT;
 				move(-20.f, 0.f);
                 break;
             case sf::Keyboard::Right:
 				texture = textures[3];
 				sprite.setTexture(texture);
+				direction = Direction::RIGHT;
 				move(20.f, 0.f);
                 break;
 			case sf::Keyboard::Space:
-				printf("YEEHAW!\n");
+				shoot();
+				break;
             // TODO: Handle shooting, pausing, restarting, quitting as necessary
             default:
                 break;
@@ -95,8 +108,20 @@ void PlayerShip::move(float x, float y) {
 	position.y += y;
 }
 
+void PlayerShip::shoot() {
+	Shot* shot = new Shot(position.x, position.y, direction);
+	
+	playerShots.push_back(shot);
+}
+
 void PlayerShip::updateShots() {
 	for (auto& shot : playerShots) {
-		shot.update();
+		shot->update();
+	}
+}
+
+void PlayerShip::renderShots(sf::RenderWindow& window) {
+	for (auto& shot : playerShots) {
+		shot->render(window);
 	}
 }
