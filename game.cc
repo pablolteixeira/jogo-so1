@@ -1,4 +1,5 @@
 #include "game.h"
+#include "collision_handler.h"
 #include "enums/direction.h"
 #include "player_ship.h"
 #include "score_panel.h"
@@ -10,7 +11,7 @@
 #include <sys/stat.h>
 #include <vector>
 
-Game::Game(SharedState& state) : score_panel() {
+Game::Game(SharedState& state) : score_panel(), collision_handler(*this) {
 	initVariables();
 	initWindow();
 	initEnemies();
@@ -59,6 +60,8 @@ const bool Game::running() const {
 void Game::update(float dt) {
 	//player->update(dt);
 	player->update();
+	collision_handler.checkShipBorderCollision(*player);
+
 	for (auto& enemy : enemies) {
 		enemy->update(dt);	
 	}

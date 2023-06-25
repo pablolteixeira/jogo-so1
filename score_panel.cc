@@ -37,3 +37,5 @@ void ScorePanel::render(sf::RenderWindow& window) {
     window.draw(scoreText);
     window.draw(velocityText);
 }
+
+

@@ -11,6 +11,7 @@
 #include <SFML/Window/WindowBase.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics.hpp>
+#include "collision_handler.h"
 #include "enemy_ship.h"
 #include <vector>
 #include <memory>
@@ -31,6 +32,9 @@ public:
 	sf::Clock clock;
 	const bool running() const;
 
+	sf::RectangleShape left_frame;
+	sf::RectangleShape right_frame;
+
 private:
 	sf::RenderWindow *window;
 	sf::Event ev;
@@ -38,9 +42,7 @@ private:
 	Input input;
 	SharedState shared_state;
 	ScorePanel score_panel;
-
-	sf::RectangleShape left_frame;
-	sf::RectangleShape right_frame;
+	CollisionHandler collision_handler;
 
 	// TODO: make a class for enemy
 	std::vector<std::unique_ptr<EnemyShip>> enemies;

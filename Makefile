@@ -5,8 +5,8 @@ SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
 all: main
 
-main: game.o main.o enemy_ship.o player_ship.o input.o score_panel.o
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -o main game.o main.o enemy_ship.o player_ship.o input.o score_panel.o $(SFML_LIBS)
+main: game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -o main game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o $(SFML_LIBS)
 
 game.o: game.cc game.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c game.cc
@@ -25,6 +25,9 @@ input.o: input.cc input.h
 
 score_panel.o: score_panel.cc score_panel.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c score_panel.cc
+
+collision_handler.o: collision_handler.cc collision_handler.h
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c collision_handler.cc
 
 clean:
 	rm -f *.o main
