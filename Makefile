@@ -8,6 +8,7 @@ all: main
 main: game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -o main game.o main.o enemy_ship.o player_ship.o input.o score_panel.o collision_handler.o $(SFML_LIBS)
 
+<<<<<<< HEAD
 game.o: game.cc game.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c game.cc
 
@@ -16,6 +17,16 @@ main.o: main.cc
 
 enemy_ship.o: enemy_ship.cc enemy_ship.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c enemy_ship.cc
+=======
+_DEPS = window.h Game.h Ship.h
+DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
+
+_OBJ = main.o window.o Game.o Ship.o
+OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+
+$(ODIR)/%.o: %.cpp $(DEPS)
+	$(CC) -std=c++14 -c -o $@ $< $(CFLAGS)
+>>>>>>> 22fc5ba46a30289040941cf0f21b2d6310b763c3
 
 player_ship.o: player_ship.cc player_ship.h
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c player_ship.cc

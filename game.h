@@ -8,7 +8,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/VideoMode.hpp>
-#include <SFML/Window/WindowBase.hpp>
+//#include <SFML/Window/WindowBase.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics.hpp>
 #include "collision_handler.h"

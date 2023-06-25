@@ -94,3 +94,9 @@ void PlayerShip::move(float x, float y) {
 	position.x += x;
 	position.y += y;
 }
+
+void PlayerShip::updateShots() {
+	for (auto& shot : playerShots) {
+		shot.update();
+	}
+}
