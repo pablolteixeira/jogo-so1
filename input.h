@@ -1,34 +1,20 @@
 #ifndef input_h
 #define input_h
 
-#include "game_objects/player_spaceship.h"
-#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
+#include <queue>
+#include "thread/list.h"
 
 class Input {
 public:
-	Input(PlayerSpaceship& player, sf::RenderWindow& window) : player(player), window(window) {}
-	
-    void processEvent(const sf::Event& event) {
-		switch (event.type) {
-			case sf::Event::KeyPressed:
-				notifyPlayer(event.key.code);
-				break;
-			case sf::Event::Closed:
-				window.close();
-				break;
-			default:
-				break;
-		}
-    }
+	Input();
+	~Input();
+    void pushEvent(const sf::Event::KeyEvent& event);
+    bool tryPopKey(sf::Keyboard::Key& key);
+	std::queue<sf::Keyboard::Key> key_event_queue;
 
 private:
-    void notifyPlayer(sf::Keyboard::Key key) {
-        player.handleInput(key);
-    }
-
-	sf::RenderWindow& window;
-    PlayerSpaceship& player;
 };
 
 #endif

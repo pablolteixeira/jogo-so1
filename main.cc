@@ -1,14 +1,16 @@
-#include "window.h"
-#include <SFML/Graphics/RenderWindow.hpp>
 #include "game.h"
+#include <SFML/System/Time.hpp>
 
-int main(void)
-{
-    sf::RenderWindow window(sf::VideoMode(900, 560), "SFML works!");
-    Game game(window);
-    Window game_window(game);
+int main() {
+	SharedState state; 
+	Game game(state);
 
-    game_window.run();
+	while (game.running()) {
+		game.handleEvents();
+		sf::Time dt = game.clock.restart();
+		game.update(dt.asSeconds());
+		game.render();
+	}
 
-    return 0;
+	return 0;
 }
