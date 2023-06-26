@@ -6,7 +6,6 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include "enums/direction.h"
-#include "input.h"
 #include "shot.h"
 #include "thread/traits.h"
 #include <memory>

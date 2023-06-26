@@ -24,17 +24,17 @@ CPU::Context::~Context()
 
 int CPU::switch_context(Context *from, Context *to)
 {
-	std::cout << "switch context\n";
+	//std::cout << "switch context\n";
     if (!from || !to) {
-		std::cout << "not to and fro\n";
+		//std::cout << "not to and fro\n";
         db<CPU>(TRC) << "CPU::Context::switch_context returned -1 (`!from || !to` returned `true`)\n";
         return -1;
     }
 
     // We need to save the context `from` for later use through a temporary variable 
-	std::cout << "just before swap context\n";
+	//std::cout << "just before swap context\n";
     int result = swapcontext(&from->_context, &to->_context);
-	std::cout << "just after swap context\n";
+	//std::cout << "just after swap context\n";
     db<CPU>(TRC) << "CPU::Context::switch_context returned result\n";
     return result;
 }

@@ -1,6 +1,6 @@
 #include "player_ship.h"
 #include "enums/direction.h"
-#include "input.h"
+#include "window.h"
 #include "thread/thread.h"
 #include "thread/traits.h"
 #include <SFML/Graphics/Texture.hpp>
@@ -60,9 +60,8 @@ PlayerShip::~PlayerShip() {
 };
 
 void PlayerShip::run() {
-	std::cout << "playership::run()\n" << std::flush;
-	// FIXME: change this to while(game is running) or something
-	while (true) {
+	//std::cout << "playership::run()\n" << std::flush;
+	while (this->window->getIsRunning()) {
 		if (window == nullptr) {
 			Thread::yield();
 		}
@@ -112,7 +111,7 @@ void PlayerShip::render(sf::RenderWindow& window) {
 
 void PlayerShip::processUserInput() {
 	// TODO: lock para key aqui
-	std::cout << "processUserInput\n" << std::endl;
+	//std::cout << "processUserInput\n" << std::endl;
 	switch(key) {
 		case sf::Keyboard::Up:
 			changeDirection(Direction::UP);
@@ -134,7 +133,7 @@ void PlayerShip::processUserInput() {
 			break;
 	}
 	key = sf::Keyboard::KeyCount; // arbitrary value 
-	std::cout << "default key set\n" << std::endl;
+	//std::cout << "default key set\n" << std::endl;
 	// TODO: unlock key aqui
 }
 

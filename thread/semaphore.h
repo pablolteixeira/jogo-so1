@@ -14,9 +14,9 @@ public:
     typedef Ordered_List<Thread> Queue;
 
     Semaphore(int v = 1) {
-		std::cout << "\n\n\nin semaphore constructor\n" << std::flush;
+		//std::cout << "\n\n\nin semaphore constructor\n" << std::flush;
         this->value = v;
-		std::cout << "value in constructor\n" << value << std::flush;
+		//std::cout << "value in constructor\n" << value << std::flush;
     };
     ~Semaphore();
 

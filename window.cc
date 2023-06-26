@@ -14,11 +14,15 @@ Window::Window(sf::RenderWindow& window)
 {
 	initMaze();
 	initFrames();
+	this->isRunning = true;
 };
 
+Window::~Window() {
+
+}
+
 void Window::runWindow() {
-	// FIXME: change while(true) to while(is game running)
-	while (true) {
+	while (this->getIsRunning()) {
 		if (input == nullptr || player == nullptr) {
 			Thread::yield();
 		}
@@ -28,13 +32,21 @@ void Window::runWindow() {
 	}
 }
 
+void Window::finishWindow() {
+	this->isRunning = false;
+}
+
+bool Window::getIsRunning() {
+	return this->isRunning;
+}
+
 void Window::handleKeyboardInput() {
-	std::cout << "handle keyboard input\n" << std::flush;
+	//std::cout << "handle keyboard input\n" << std::flush;
 
 	sf::Keyboard::Key key;
 	
 	if (input->tryPopKey(key)) {
-		std::cout << "inside if try pop key\n" << std::flush;
+		//std::cout << "inside if try pop key\n" << std::flush;
 		if (key == sf::Keyboard::Up || key == sf::Keyboard::Down || 
 			key == sf::Keyboard::Left || key == sf::Keyboard::Right ||
 			key == sf::Keyboard::Space)
@@ -46,6 +58,7 @@ void Window::handleKeyboardInput() {
 		} else if (key == sf::Keyboard::Q) {
 			// FIXME: need to close the game instead of just closing the window
 			window.close();
+			finishWindow();
 		} else if (key == sf::Keyboard::R) {
 			
 		}

@@ -9,7 +9,7 @@ void System::init(void (*main)(void *)) {
 
     setvbuf(stdout, 0,_IONBF, 0);    
 
-	std::cout << "in system init\n";
+	//std::cout << "in system init\n";
 
     Thread::init(main);
 }

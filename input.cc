@@ -1,9 +1,12 @@
 #include "input.h"
 #include "thread/traits.h"
+#include "game.h"
+#include "window.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <map>
 #include "thread/thread.h"
+
 
 __BEGIN_API
 
@@ -16,7 +19,7 @@ Input::~Input() {
 
 void Input::runInput() {
 	// FIXME: while(true) should be while(game is running)
-	while (true) {
+	while (this->window->getIsRunning()) {
 		handleEvents();	
 		Thread::yield();
 	}
@@ -26,12 +29,13 @@ void Input::runInput() {
 void Input::handleEvents() {
 	sf::Event ev;
 
-	while (window.pollEvent(ev)) {
-		std::cout << "\n\n\n\n\n\nWINDOW POLL!\n\n\n" << std::flush;
+	while (renderWindow.pollEvent(ev)) {
+		//std::cout << "\n\n\n\n\n\nWINDOW POLL!\n\n\n" << std::flush;
 		switch (ev.type) {
 			case sf::Event::Closed:
 				// FIXME: handle this better. End game;
-				window.close();
+				renderWindow.close();
+				this->window->finishWindow();
 				break;
 			case sf::Event::KeyPressed:
 				pushEvent(ev.key);
@@ -55,17 +59,17 @@ void Input::pushEvent(const sf::Event::KeyEvent& event) {
 }
 
 bool Input::tryPopKey(sf::Keyboard::Key& key) {
-	std::cout << "try pop key\n" << std::flush;
+	//std::cout << "try pop key\n" << std::flush;
 	key_event_queue_mutex->p();
-	std::cout << "semaphore issue?\n" << std::flush;
+	//std::cout << "semaphore issue?\n" << std::flush;
     if (!key_event_queue.empty()) {
-		std::cout << "key not empty\n" << std::flush;
+		//std::cout << "key not empty\n" << std::flush;
         key = key_event_queue.front();
         key_event_queue.pop();
 		key_event_queue_mutex->v();
         return true;
     }
-	std::cout << "key ISSSSSS empty\n" << std::flush;
+	//std::cout << "key ISSSSSS empty\n" << std::flush;
 	
 	key_event_queue_mutex->v();
     return false;

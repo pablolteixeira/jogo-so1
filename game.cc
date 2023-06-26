@@ -37,7 +37,7 @@ Game::~Game() {
 }
 
 void Game::runPlayer() {	
-	std::cout << "runplayer\n" << std::flush;
+	//std::cout << "runplayer\n" << std::flush;
 	db<System>(TRC) << "Game::runPlayer() started\n";
 
 	player = std::make_unique<PlayerShip>(sf::Vector2f(400.f, 300.f), Direction::UP);
@@ -50,9 +50,11 @@ void Game::runPlayer() {
 }
 
 void Game::runInput() {
-	std::cout << "run input\n" << std::flush;
+	//std::cout << "run input\n" << std::flush;
 	input = std::make_unique<Input>(*render_window.get());
+	input->setWindow(window.get());
 	window->setInput(input.get());
+
 	input->runInput();
 	input_thread->thread_exit(1);
 }
@@ -68,8 +70,8 @@ void Game::run(void *name) {
 
 	// initializing the render window
 	sf::VideoMode video_mode;
-	video_mode.height = 600;
-	video_mode.width = 800;
+	video_mode.height = 560;
+	video_mode.width = 815;
 	render_window = std::make_unique<sf::RenderWindow>(video_mode, "SFML GAME", sf::Style::Titlebar | sf::Style::Close);
 	render_window->setFramerateLimit(60);
 	
@@ -81,6 +83,7 @@ void Game::run(void *name) {
 	window_thread->join();
 	input_thread->join();
 	player_thread->join();
+
 
 	delete window_thread;
 	delete input_thread;

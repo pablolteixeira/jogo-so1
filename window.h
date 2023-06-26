@@ -19,14 +19,22 @@ class Window {
 public:
 	//Window(sf::RenderWindow& window, Input& input, PlayerShip& player);
 	Window(sf::RenderWindow& window);
+	~Window();
+
 	void runWindow();
 
 	void setPlayer(PlayerShip *player) { this->player = player; }
 	void setInput(Input *input) { this->input = input; }
+	void finishWindow();
+
+	bool getIsRunning();
 
 private:
 	// this window will render the objects
 	sf::RenderWindow& window;
+
+	// this variable indicates if the game is running
+	bool isRunning = false; 
 
 	// textures and sprites for the screen 
 	sf::RectangleShape right_frame;
