@@ -1,12 +1,16 @@
 #include "player_ship.h"
 #include "enums/direction.h"
 #include "input.h"
+#include "thread/thread.h"
+#include "thread/traits.h"
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <cstdio>
 
-PlayerShip::PlayerShip(sf::Vector2f position, Direction shipDirection, SharedState& state, Input& input) : shared_state(state), input(input) {
+__BEGIN_API
+
+PlayerShip::PlayerShip(sf::Vector2f position, Direction shipDirection, Input& input) : input(input) {
 	if (!this->texture.loadFromFile("sprites/space_ships/space_ship3.png")) {
 		exit(1);
 	}
@@ -42,14 +46,23 @@ PlayerShip::PlayerShip(sf::Vector2f position, Direction shipDirection, SharedSta
 	this->sprite.setScale(0.5f, 0.5f);
 	this->sprite.setPosition(position);
 
+	running = true;
+
 	this->speed = 180.f;
 	this->shootDelay = 0.5f;
 	this->shootTimer = 0.f;
 }
 
 PlayerShip::~PlayerShip() {
-
+	running = false;
 };
+
+void PlayerShip::run() {
+	while (running) {
+		processUserInput();
+		// TODO: other stuff here
+	}
+}
 
 void PlayerShip::changeDirection(Direction direction) {
 	this->direction = direction;
@@ -77,6 +90,9 @@ void PlayerShip::changeDirection(Direction direction) {
 	}
 }
 
+void PlayerShip::setUserKeyPress(sf::Keyboard::Key kbKey) {
+	key = kbKey;
+}
 
 void PlayerShip::update(float dt) {
 	move(dt);
@@ -86,7 +102,8 @@ void PlayerShip::render(sf::RenderWindow& window) {
     window.draw(this->sprite);
 }
 
-void PlayerShip::getUserInput(sf::Keyboard::Key key) {
+void PlayerShip::processUserInput() {
+	// TODO: lock para key aqui
 	switch(key) {
 		case sf::Keyboard::Up:
 			changeDirection(Direction::UP);
@@ -107,6 +124,8 @@ void PlayerShip::getUserInput(sf::Keyboard::Key key) {
 		default:
 			break;
 	}
+	key = sf::Keyboard::KeyCount; // arbitrary value 
+	// TODO: unlock key aqui
 }
 
 void PlayerShip::increaseScore() {
@@ -131,4 +150,4 @@ void PlayerShip::shoot() {
     Shot::_shots.push_back(shot);
 }
 
-
+__END_API

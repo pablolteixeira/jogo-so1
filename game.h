@@ -8,59 +8,40 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/VideoMode.hpp>
-//#include <SFML/Window/WindowBase.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics.hpp>
-#include "collision_handler.h"
-#include "enemy_ship.h"
 #include <vector>
 #include <memory>
 #include "input.h"
-#include "enums/shared_state.h"
 #include "player_ship.h"
-#include "score_panel.h"
-#include "shot.h"
+#include "thread/thread.h"
+#include "thread/traits.h"
+#include "window.h"
+
+__BEGIN_API
 
 class Game {
 public:
-	Game(SharedState& state);
-	virtual ~Game();
-	void update(float dt);
-	void render();
-	void handleEvents();
-	void handleInput();
-	void updateVelocityCounter();
-	int velocity_counter = 0;
-	int wave_velocity = 1;
+	Game();
+	~Game();
+	void run();
 
-	sf::Clock clock;
-	const bool running() const;
-	std::vector<std::unique_ptr<EnemyShip>> enemies;
-
-	sf::RectangleShape left_frame;
-	sf::RectangleShape right_frame;
-	bool isPaused;
 private:
-	sf::RenderWindow *window;
-	sf::Event ev;
-	sf::VideoMode video_mode;
-	Input input;
-	SharedState shared_state;
-	ScorePanel score_panel;
-	CollisionHandler collision_handler;
+	static std::unique_ptr<sf::RenderWindow> render_window;
+	static std::unique_ptr<Input> input;
+	static std::unique_ptr<PlayerShip> player;
+	static std::unique_ptr<Window> window;
 
-	std::unique_ptr<PlayerShip> player;
+	static Thread* player_thread;
+	static Thread* window_thread;
+	// TODO: vector for the enemy threads?
+	static Thread* input_thread;
 
-	//vector<Shot&> shots;
-	sf::Texture maze_tex;
-	sf::Sprite maze_sprite;
-
-	void initFrames();
-	void initWindow();
-	void initVariables();
-	void initEnemies();
-	void initMaze();
+	static void runPlayer();
+	static void runWindow();
+	static void runInput();
 };
 
+__END_API
 
 #endif

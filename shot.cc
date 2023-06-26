@@ -1,6 +1,6 @@
 #include "shot.h"
+#include "enums/direction.h"
 #include "enums/ship_type.h"
-#include "player_ship.h"
 #include <SFML/System/Vector2.hpp>
 #include <iostream>
 #include <vector>
