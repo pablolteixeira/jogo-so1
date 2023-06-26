@@ -24,7 +24,7 @@ class Game {
 public:
 	Game();
 	~Game();
-	void run();
+	static void run(void *name);
 
 private:
 	static std::unique_ptr<sf::RenderWindow> render_window;

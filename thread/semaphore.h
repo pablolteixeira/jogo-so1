@@ -14,7 +14,9 @@ public:
     typedef Ordered_List<Thread> Queue;
 
     Semaphore(int v = 1) {
+		std::cout << "\n\n\nin semaphore constructor\n" << std::flush;
         this->value = v;
+		std::cout << "value in constructor\n" << value << std::flush;
     };
     ~Semaphore();
 
@@ -31,7 +33,6 @@ private:
     void wakeup_all();
 
 private:
-    //DECLARAÇÃO DOS ATRIBUTOS DO SEMÁFORO
     Queue sleeping_queue;
     int value;
 };

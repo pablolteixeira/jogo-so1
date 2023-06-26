@@ -9,8 +9,8 @@
 
 __BEGIN_API
 
-Window::Window(sf::RenderWindow& window, Input& input, PlayerShip& player)
-	: window(window), input(input), player(player)
+Window::Window(sf::RenderWindow& window)
+	: window(window) 
 {
 	initMaze();
 	initFrames();
@@ -19,6 +19,9 @@ Window::Window(sf::RenderWindow& window, Input& input, PlayerShip& player)
 void Window::runWindow() {
 	// FIXME: change while(true) to while(is game running)
 	while (true) {
+		if (input == nullptr || player == nullptr) {
+			Thread::yield();
+		}
 		handleKeyboardInput();
 		draw();
 		Thread::yield();
@@ -26,14 +29,17 @@ void Window::runWindow() {
 }
 
 void Window::handleKeyboardInput() {
+	std::cout << "handle keyboard input\n" << std::flush;
+
 	sf::Keyboard::Key key;
 	
-	if (input.tryPopKey(key)) {
+	if (input->tryPopKey(key)) {
+		std::cout << "inside if try pop key\n" << std::flush;
 		if (key == sf::Keyboard::Up || key == sf::Keyboard::Down || 
 			key == sf::Keyboard::Left || key == sf::Keyboard::Right ||
 			key == sf::Keyboard::Space)
 		{
-			player.setUserKeyPress(key);
+			player->setUserKeyPress(key);
 		} else if (key == sf::Keyboard::P) {
 			// TODO: isPaused on P 
 			//isPaused = !this->isPaused;
@@ -47,14 +53,16 @@ void Window::handleKeyboardInput() {
 }
 
 void Window::draw() {
+	window.clear();
 	drawScreen();
-	window.draw(player.sprite);
+	window.draw(player->sprite);
+	window.display();
 }
 
 void Window::drawScreen() {
-	window.draw(maze_sprite);
 	window.draw(right_frame);
 	window.draw(left_frame);
+	window.draw(maze_sprite);
 }
 
 void Window::initFrames() {

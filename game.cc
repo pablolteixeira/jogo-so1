@@ -1,4 +1,5 @@
 #include "game.h"
+#include "enums/direction.h"
 #include "input.h"
 #include "player_ship.h"
 #include "thread/debug.h"
@@ -11,6 +12,7 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <iostream>
 #include <memory>
+#include <ostream>
 #include <sys/stat.h>
 #include <vector>
 #include "thread/thread.h"
@@ -35,30 +37,33 @@ Game::~Game() {
 }
 
 void Game::runPlayer() {	
-	std::cout << "runplayer\n";
+	std::cout << "runplayer\n" << std::flush;
 	db<System>(TRC) << "Game::runPlayer() started\n";
 
-	player = std::make_unique<PlayerShip>(sf::Vector2f(400.f, 300.f), Direction::UP, *input.get());
+	player = std::make_unique<PlayerShip>(sf::Vector2f(400.f, 300.f), Direction::UP);
+	player->setWindow(window.get());
+	window->setPlayer(player.get());
+		
 	// TODO: player->attachWindow? window->attachShip?
 	player->run();
-	player_thread->thread_exit(3);
+	player_thread->thread_exit(2);
 }
 
 void Game::runInput() {
-	std::cout << "run input\n";
+	std::cout << "run input\n" << std::flush;
 	input = std::make_unique<Input>(*render_window.get());
+	window->setInput(input.get());
 	input->runInput();
-	input_thread->thread_exit(2);
+	input_thread->thread_exit(1);
 }
 
 void Game::runWindow() {
-	std::cout << "run window\n";
-	window = std::make_unique<Window>(*render_window.get(), *input.get(), *player.get());
+	window = std::make_unique<Window>(*render_window.get());
 	window->runWindow();
-	window_thread->thread_exit(1);
+	window_thread->thread_exit(3);
 }
 
-void Game::run() {
+void Game::run(void *name) {
 	db<System>(TRC) << "Game is starting\n";
 
 	// initializing the render window
@@ -68,14 +73,10 @@ void Game::run() {
 	render_window = std::make_unique<sf::RenderWindow>(video_mode, "SFML GAME", sf::Style::Titlebar | sf::Style::Close);
 	render_window->setFramerateLimit(60);
 	
-	std::cout << "initialized window\n";
-
 	// threading and running the game
-	Thread *window_thread = new Thread(runWindow);
-	Thread *input_thread = new Thread(runInput);
-	Thread *player_thread = new Thread(runPlayer);
-
-	std::cout << "created threads\n";
+	window_thread = new Thread(runWindow);
+	input_thread = new Thread(runInput);
+	player_thread = new Thread(runPlayer);
 
 	window_thread->join();
 	input_thread->join();

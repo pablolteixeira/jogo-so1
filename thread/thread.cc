@@ -76,18 +76,21 @@ void Thread::init(void (*main)(void *)) {
     
     // creation of thread main
     new (&_main) Thread(main, (void *) "Main");
+	std::cout << "thread main created\n";
 
     // creation of main context
     new (&_main_context) CPU::Context();
 
     // creation of thread dispatcher
     new (&_dispatcher) Thread((void (*) (void *)) &Thread::dispatcher, (void *) NULL);
+	std::cout << "thread dispatcher created\n";
     
     _running = &_main;
     _main._state = RUNNING;
 
     // change the context
     CPU::switch_context(&_main_context, _main.context());
+	std::cout << "switched context man\n";
 }
 
 // dispatcher implementation
@@ -161,16 +164,20 @@ Thread::~Thread() {
 
 // Thread join implementation
 int Thread::join() {
+	std::cout << "in thread join " << _id << std::endl << std::flush;
     db<Thread>(TRC) << "Thread::join called\n";
     
     if (this->_state != FINISHING && this != _running) {
+		std::cout << "join first if\n" << std::flush;
         // The running thread will be suspended
         _joined = _running;
         _joined->suspend();
     } else {
+		std::cout << "join returned -1\n" << std::flush;
         // return -1 when the state is equal to finishing or it the threads is not the one running
         return -1;
     }
+	std::cout << "join returned exit code " << _exit_code << std::endl << std::flush;
     return _exit_code;
 }
 
