@@ -7,5 +7,6 @@ __USING_API
 
 int main() {
 	System::init(&Game::run);
+	std::cout << "after init\n" << std::flush;
 	return 0;
 }

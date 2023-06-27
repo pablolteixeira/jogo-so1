@@ -12,6 +12,8 @@ void System::init(void (*main)(void *)) {
 	std::cout << "in system init\n";
 
     Thread::init(main);
+
+	std::cout << "after thread init\n" << std::flush;
 }
 
 __END_API
