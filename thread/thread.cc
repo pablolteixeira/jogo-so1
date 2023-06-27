@@ -1,202 +1,229 @@
-#include <iostream>
 #include "thread.h"
-#include "traits.h"
-#include "list.h"
+#include <iostream>
 
 __BEGIN_API
 
-/* Inicialização de variáveis */
+Thread* Thread::_running = nullptr;
+unsigned int Thread::_thread_counter = 0;
 
-int Thread::_last_id = 0;
-Thread *Thread::_running = nullptr;
-Thread Thread::_main;
+Thread Thread::_main; 
 CPU::Context Thread::_main_context;
 Thread Thread::_dispatcher;
-Thread::Ready_Queue Thread::_ready;
+Thread::Queue Thread::_ready;
+Thread::Queue Thread::_suspended;
 
-int Thread::switch_context(Thread *prev, Thread *next)
-{
-  if (prev && next)
-  {
-    db<Thread>(TRC) << "Thread::switch_context() da Thread " << prev->id() << " para a Thread " << next->id() << "\n";
+// switch_context implementation
+int Thread::switch_context(Thread * prev, Thread * next) {
+    db<Thread>(TRC) << "Thread::switch_context called\n";
 
-    set_running(next);
-    return CPU::switch_context(prev->_context, next->_context);
-  }
-  else
-  {
-    db<Thread>(ERR) << "Erro em Thread::switch_context()\n";
-    return -1;
-  }
-}
-
-void Thread::thread_exit(int exit_code)
-{
-  db<Thread>(TRC) << "Thread::thread_exit() chamado para a Thread" << this->id() << "\n";
-  this->_state = FINISHING;
-  this->_exit_code = exit_code;
-  _last_id--;
-  bool main_sleeping = false;
-
-  for (unsigned int i = 0; i < this->_suspended_queue.size(); i++)
-  {
-    Thread *to_resume = this->_suspended_queue.remove_head()->object();
-    if (to_resume)
-    {
-      if (to_resume == &_main)
-      {
-        // Deve ser tratada separadamente
-        main_sleeping = true;
-      }
-      else
-      {
-        to_resume->resume();
-      }
+    // Verifying that the ids are different, so they aren't the same thread
+    if (prev->id() != next->id()) {
+        Thread::_running = next;
+        return CPU::switch_context(prev->_context, next->_context);
     }
-  }
-
-  if (main_sleeping)
-  {
-    // Se é a main, não posso reinseri-la na fila
-    (&_main)->_state = RUNNING;
-    switch_context(this, &_main);
-  }
-
-  yield();
+    return 0;
 }
 
-Thread::~Thread()
-{
-  delete _context;
-  db<Thread>(TRC) << "Thread::~Thread()" << this->id() << "\n";
-}
+// thread_exit implementation
+void Thread::thread_exit(int exit_code) {
+    db<Thread>(TRC) << "Thread::thread_exit called\n";
 
-int Thread::id() { return this->_id; }
+    Thread::_thread_counter--;
+    _exit_code = exit_code;
+    _state = State::FINISHING;
 
-inline void Thread::dispatcher()
-{
+    bool sleeping_main = false;
 
-  while (_last_id > 2)
-  {
-    db<Thread>(TRC) << "Início do loop dispatcher\n";
-    db<Thread>(TRC) << "Head antes de remover: " << Thread::_ready.head()->object()->id() << "\n";
-
-    Thread *next_running = Thread::_ready.remove_head()->object(); // escolhe a próxima thread para executar
-    _dispatcher._state = READY;
-    _ready.insert(&_dispatcher._link); // reinsire dispatcher na fila
-
-    Thread::set_running(next_running);
-    next_running->_state = RUNNING;
-
-    Thread::switch_context(&_dispatcher, next_running);
-
-    if (next_running->_state == FINISHING)
-    {
-      db<Thread>(TRC) << "id Thread removida: " << next_running->_id << "\n";
-      _ready.remove(next_running);
+    for (unsigned int i = 0; i < this->_suspended.size(); i++) {
+        Thread *supended_thread = this->_suspended.remove_head()->object();
+        
+        if (supended_thread) {
+            if (supended_thread == &_main) {
+                // Will be handle in a different way
+                sleeping_main = true;
+            } else {
+                supended_thread->resume();
+            }
+        }
     }
-  }
 
-  _dispatcher._state = FINISHING;
-  _ready.remove(&_dispatcher);
-  db<Thread>(TRC) << "_ready.size(): " << Thread::_ready.size() << "\n";
-  db<Thread>(TRC) << "Voltando pra main... " << Thread::_main.id() << "\n";
-  Thread::switch_context(&_dispatcher, &_main);
+    if (sleeping_main) {
+        // Se é a main, não posso reinseri-la na fila
+        (&_main)->_state = RUNNING;
+        switch_context(this, &_main);
+    }
+
+    yield();
 }
 
-void Thread::init(void (*main)(void *))
-{
-  db<Thread>(TRC) << "Thread::init foi chamado\n";
-  new (&_main) Thread(main, (void *)"main");
-  new (&_dispatcher) Thread(dispatcher);
-  new (&_main_context) CPU::Context();
+// id implementation
+int Thread::id() {
+    // return the thread's id
+    //db<Thread>(TRC) << "Thread's id returned\n";
+    return _id;
+};
 
-  _running = &_main;
-  _main._state = RUNNING;
+// context() implementation
+Thread::Context* Thread::context() volatile {
+    // return the thread's context
+    db<Thread>(TRC) << "Thread's context returned\n";
+    return _context;
+};
 
-  CPU::switch_context(&_main_context, _main.context());
+// init implementation
+void Thread::init(void (*main)(void *)) {
+    db<Thread>(TRC) << "Thread::init called\n";
+    
+    // creation of thread main
+    new (&_main) Thread(main, (void *) "Main");
+
+    // creation of main context
+    new (&_main_context) CPU::Context();
+
+    // creation of thread dispatcher
+    new (&_dispatcher) Thread((void (*) (void *)) &Thread::dispatcher, (void *) NULL);
+    
+    _running = &_main;
+    _main._state = RUNNING;
+
+    // change the context
+    CPU::switch_context(&_main_context, _main.context());
 }
 
-void Thread::yield()
-{
-  db<Thread>(TRC) << "Yield chamado com running sendo " << _running->_id << "\n";
+// dispatcher implementation
+void Thread::dispatcher() {
+    db<Thread>(TRC) << "Thread::dispatcher called\n";
 
-  Thread *next_running = Thread::_ready.remove_head()->object();
+    while (_thread_counter > 2) {
+        // removing the first thread in the ready queue
+        Thread * next_thread = _ready.remove()->object();
 
-  if ((_main)._state != RUNNING && _running->_state == RUNNING)
-  {
-    int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-    _running->_link.rank(now);         // Atualiza prioridade da tarefa
-    _ready.insert(&(_running->_link)); // Reinsere a que está em execução
-  }
+        // updating state and inserting again thread dispatcher in ready queue  
+        _dispatcher._state = State::READY;
+        _ready.insert(&_dispatcher._link);
+        
+        // updating _running pointer
+        next_thread->_state = State::RUNNING;
 
-  if (_running->_state == RUNNING)
-  {
-    _running->_state = READY; // Atualiza READY para todas exceto se FINISHING ou SUSPENDED ou WAITING
-  }
+        // switching contexts between dispatcher and the thread chose
+        Thread::switch_context(&_dispatcher, next_thread);
 
-  Thread *last_running = _running;
-  Thread::set_running(next_running);
-  next_running->_state = RUNNING;
-  _ready.remove(_running); // Removo a proxima a executar da fila de prontos
-  db<Thread>(TRC) << "Finalizando yield, running agora será " << _running->_id << "\n";
-  switch_context(last_running, _running);
+        if (next_thread->_state == State::FINISHING) {
+            _ready.remove(next_thread);
+        }
+    }
+    _dispatcher._state = State::FINISHING;
+    _ready.remove(&_dispatcher);
+    Thread::switch_context(&_dispatcher, &_main);
 }
 
-int Thread::join()
-{
-  db<Thread>(TRC) << "Join chamado com this sendo " << this->_id << " e running sendo " << _running->_id << "\n";
+// yield implementation
+void Thread::yield() {
+    db<Thread>(TRC) << "Thread::yield called\n";
 
-  if (this->_state != FINISHING && this != _running)
-  {
-    this->_suspended_queue.insert(&(_running->_link));
-    _running->suspend();
-  }
-  else
-  {
-    db<Thread>(ERR) << "Erro ao fazer join";
-    return -1;
-  }
+    // Reference to the running thread
+    Thread * prev = _running;
+    
+    // Removing the first thread in the _ready
+    Thread * next = _ready.remove()->object();
 
-  return _exit_code;
+    // updating the running thread state and priority
+    if (_main._state != State::RUNNING && _running->_state == RUNNING) {
+        // updating prev thread link
+        int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+        prev->_link.rank(now);
+
+        // updating the prev thread state
+        prev->_state = State::READY;
+
+        // inserting the thread_prev
+        _ready.insert(&prev->_link);
+    }
+    
+    // updating the new running thread
+    _running = next;
+    next->_state = State::RUNNING;
+
+    // switching contexts between the previous running thread and the new one (_running receive the next threads's pointer)
+    Thread::switch_context(prev, next);
 }
 
-void Thread::suspend()
-{
-  db<Thread>(TRC) << "Suspend chamado para thread " << this->_id << "\n";
-  if (this != &_main)
-  {
+// Thread destructor implementation
+Thread::~Thread() {
+    db<Thread>(TRC) << "Thread::~Thread called\n";
+
+    // remove the thread that called this method from _ready 
     _ready.remove(this);
-  }
-  this->_state = SUSPENDED;
-  yield();
+    if (_context) {
+        delete _context;
+    }
 }
 
-void Thread::resume()
-{
-  db<Thread>(TRC) << "Resume chamado para thread" << this->_id << "\n";
-  if (this->_state == SUSPENDED)
-  {
-    _ready.insert(&(this->_link));
-    this->_state = READY;
-  }
+// Thread join implementation
+int Thread::join() {
+    db<Thread>(TRC) << "Thread::join called\n";
+    
+    if (this->_state != FINISHING && this != _running) {
+        // The running thread will be suspended
+        _joined = _running;
+        _joined->suspend();
+    } else {
+        // return -1 when the state is equal to finishing or it the threads is not the one running
+        return -1;
+    }
+    return _exit_code;
 }
 
-Thread::Ready_Queue::Element *Thread::get_link()
-{
-  return &(this->_link);
+// Thread suspend implementation
+void Thread::suspend() {
+    db<Thread>(TRC) << "Thread::suspend called\n";
+
+    if (this != &_main) {
+        // removing the thread from _ready
+        _ready.remove(this);
+    }
+
+    // changing it state to suspended and then inserting it to _suspended
+    _state = State::SUSPENDED;
+    _suspended.insert(&this->_link);
+    yield();
 }
 
-Thread *Thread::sleep()
-{
-  _running->_state = WAITING;
-  return _running;
+// Thread resume implementation
+void Thread::resume() {
+    db<Thread>(TRC) << "Thread::resume called\n";
+
+    if (_joined->_state == SUSPENDED) {
+        // removing the supended thread from _suspended
+        _suspended.remove(_joined);
+
+        // changing it state to ready and then inserting it to _ready
+        _state = State::READY;
+        _ready.insert(&_joined->_link);
+        _joined = nullptr;
+    }
+}   
+
+// Thread sleep implementation
+Thread *Thread::sleep() {
+    db<Thread>(TRC) << "Thread::sleep called\n";
+    _running->_state = WAITING;
+
+    return _running;
 }
 
-void Thread::wakeup(Thread *t)
-{
-  t->_state = READY;
-  _ready.insert(&(t->_link));
+// Thread wakeup implementation
+void Thread::wakeup(Thread *thread) {
+    db<Thread>(TRC) << "Thread::wakeup called\n";
+    thread->_state = READY;
+
+    // insert the thread that was sleeping again in READY queue
+    _ready.insert(&thread->_link);
+}
+
+Thread::Queue::Element *Thread::link_getter() {
+    db<Thread>(TRC) << "Thread::link_getter called\n";
+    return &this->_link;
 }
 
 __END_API

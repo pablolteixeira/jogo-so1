@@ -60,7 +60,6 @@ Game::~Game() {
 }
 
 void Game::runPlayer() {	
-	std::cout << "RUN PLAYEr\n" << std::flush;
 	db<System>(TRC) << "Game::runPlayer() started\n";
 
 	player = std::make_unique<PlayerShip>(sf::Vector2f(400.f, 300.f), Direction::UP);
@@ -69,25 +68,20 @@ void Game::runPlayer() {
 		
 	// TODO: player->attachWindow? window->attachShip?
 	player->run();
-	std::cout << "thread exit\n" << std::flush;
 	player_thread->thread_exit(3);
 }
 
 void Game::runInput() {
-	std::cout << "RUN INPUT\n" << std::flush;
 	input = std::make_unique<Input>(*render_window.get());
 	input->setWindow(window.get());
 	window->setInput(input.get());
 	input->runInput();
-	std::cout << "thread exit\n" << std::flush;
 	input_thread->thread_exit(2);
 }
 
 void Game::runWindow() {
-	std::cout << "RUN WINDOW\n" << std::flush;
 	window = std::make_unique<Window>(*render_window.get());
 	window->runWindow();
-	std::cout << "thread exit\n" << std::flush;
 	window_thread->thread_exit(1);
 }
 
@@ -95,7 +89,6 @@ void Game::runShotGroup() {
 	shot_group = std::make_unique<ShotGroup>();
 	shot_group->setWindow(window.get());
 	shot_group->runShots();
-	std::cout << "thread exit\n" << std::flush;
 	shot_group_thread->thread_exit(4);
 }
 
@@ -105,7 +98,6 @@ void Game::runEnemy() {
 	window->addEnemy(enemy);
 	enemy_id++;
 	enemy->run();
-	std::cout << "thread exit\n" << std::flush;
 	enemy_threads[enemy_id-1]->thread_exit(4+enemy_id);
 }
 
@@ -113,7 +105,6 @@ void Game::runCollisionHandler() {
 	std::unique_ptr<CollisionHandler> collision_handler = std::make_unique<CollisionHandler>();
 	collision_handler->setWindow(window.get());
 	collision_handler->run();
-	std::cout << "thread exit\n" << std::flush;
 	collision_handler_thread->thread_exit(9);
 }
 
@@ -138,7 +129,6 @@ void Game::run(void *name) {
 	}
 	collision_handler_thread = new Thread(runCollisionHandler);
 
-	std::cout << "joining threads...\n" << std::flush;
 	window_thread->join();
 	input_thread->join();
 	player_thread->join();
@@ -147,7 +137,6 @@ void Game::run(void *name) {
 		thread->join();
 	}
 	collision_handler_thread->join();
-	std::cout << "joined all threads...\n" << std::flush;
 
 	delete window_thread;
 	delete input_thread;
@@ -158,15 +147,12 @@ void Game::run(void *name) {
 	}
 	delete collision_handler_thread;
 
-	std::cout << "deleted all threads...\n" << std::flush;
 
 	enemy_threads.clear();
 
-	std::cout << "clear SEGFAULT??\n" << std::flush;
 
 	db<System>(TRC) << "Game ended\n";
 
-	std::cout << "boy!\n" << std::flush;
 }
 
 __END_API

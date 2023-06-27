@@ -17,6 +17,7 @@ Window::Window(sf::RenderWindow& window)
 	initFrames();
 	initScorePanel();
 	isRunning = true;
+	isFinished = false;
 };
 
 void Window::runWindow() {

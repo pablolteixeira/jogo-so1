@@ -103,6 +103,7 @@ private:
 
 	// variable to make sure windows is running
 	bool isRunning;
+	bool isFinished;
 
 	// references game objects and logic classes  
 	Input* input = nullptr;

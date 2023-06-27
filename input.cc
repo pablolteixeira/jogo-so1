@@ -32,9 +32,7 @@ void Input::handleEvents() {
 			case sf::Event::Closed:
 				// FIXME: handle this better. End game;
 				renderWindow.close();
-				std::cout << "just before window stopped running\n" << std::flush;
 				//window->stopRunning();
-				std::cout << "window stopped running\n" << std::flush;
 				break;
 			case sf::Event::KeyPressed:
 				pushEvent(ev.key);
