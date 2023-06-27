@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include "traits.h"
-#include "debug.h"
 
 __BEGIN_API
 
@@ -18,6 +17,7 @@ public:
      * Deve ser chamado no início da função main.
      */ 
     static void init(void (*main)(void *));
+
 };
 
 __END_API
