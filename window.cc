@@ -47,7 +47,6 @@ void Window::handleKeyboardInput() {
 			window.close();
 			stopRunning();
 		} else if (key == sf::Keyboard::R) {
-			
 		}
 	}
 }
