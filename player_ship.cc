@@ -62,8 +62,7 @@ PlayerShip::~PlayerShip() {
 };
 
 void PlayerShip::run() {
-	// FIXME: change this to while(game is running) or something
-	while (true) {
+	while (window->getIsRunning()) {
 		if (window == nullptr) {
 			Thread::yield();
 		}

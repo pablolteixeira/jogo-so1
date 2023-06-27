@@ -12,8 +12,7 @@
 __BEGIN_API
 
 void CollisionHandler::run() {
-	// FIXME: game is running
-	while (true) {
+	while (window->getIsRunning()) {
 		if (window == nullptr) {
 			Thread::yield();
 		}

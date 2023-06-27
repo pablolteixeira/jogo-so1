@@ -25,7 +25,7 @@ public:
 	void checkShotShotCollision();
 
 private:
-	Window* window;
+	Window* window = nullptr;
 };
 
 __END_API

@@ -75,6 +75,7 @@ void Game::runPlayer() {
 void Game::runInput() {
 	std::cout << "RUN INPUT\n";
 	input = std::make_unique<Input>(*render_window.get());
+	input->setWindow(window.get());
 	window->setInput(input.get());
 	input->runInput();
 	input_thread->thread_exit(2);
@@ -89,6 +90,7 @@ void Game::runWindow() {
 
 void Game::runShotGroup() {
 	shot_group = std::make_unique<ShotGroup>();
+	shot_group->setWindow(window.get());
 	shot_group->runShots();
 	shot_group_thread->thread_exit(4);
 }
@@ -147,7 +149,7 @@ void Game::run(void *name) {
 		delete thread;
 	}
 	delete collision_handler_thread;
-
+	
 	enemy_threads.clear();
 
 	db<System>(TRC) << "Game ended\n";

@@ -11,9 +11,11 @@
 
 __BEGIN_API
 
+class Window;
+
 class Input {
 public:
-	Input(sf::RenderWindow& window) : window(window) {
+	Input(sf::RenderWindow& renderWindow) : renderWindow(renderWindow) {
 		key_event_queue_mutex = new Semaphore();
 	};
 	~Input();
@@ -23,11 +25,15 @@ public:
     bool tryPopKey(sf::Keyboard::Key& key);
 	void handleEvents();
 
+	void setWindow(Window* window) { this->window = window; } 
+
 	std::queue<sf::Keyboard::Key> key_event_queue;
 
 private:
+	Window* window = nullptr;
+
 	static Semaphore *key_event_queue_mutex;
-	sf::RenderWindow& window;
+	sf::RenderWindow& renderWindow;
 };
 
 __END_API

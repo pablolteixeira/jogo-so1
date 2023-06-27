@@ -73,6 +73,14 @@ public:
 		velocity_counter %= 4;
 	}
 
+	bool getIsRunning() {
+		return isRunning;
+	}
+
+	void stopRunning() {
+		isRunning = false;
+	}
+
 	// public attributes for convenience
 	std::vector<std::shared_ptr<EnemyShip>> enemies;
 	sf::RectangleShape left_frame;
@@ -92,6 +100,9 @@ private:
     sf::Text scoreText;
     sf::Text velocityText;
     sf::Font font;
+
+	// variable to make sure windows is running
+	bool isRunning;
 
 	// references game objects and logic classes  
 	Input* input = nullptr;

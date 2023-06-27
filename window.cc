@@ -16,6 +16,7 @@ Window::Window(sf::RenderWindow& window)
 	initMaze();
 	initFrames();
 	initScorePanel();
+	isRunning = true;
 };
 
 void Window::runWindow() {
@@ -43,8 +44,8 @@ void Window::handleKeyboardInput() {
 			// TODO: isPaused on P 
 			//isPaused = !this->isPaused;
 		} else if (key == sf::Keyboard::Q) {
-			// FIXME: need to close the game instead of just closing the window
 			window.close();
+			stopRunning();
 		} else if (key == sf::Keyboard::R) {
 			
 		}
