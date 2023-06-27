@@ -39,7 +39,9 @@ public:
 		return wave_velocity;
 	}
 	void lowerPlayerLives() {
-		player->lives--;
+		if (player->lives == 0) {
+			player->lives--;
+		}
 	}
 	void increasePlayerScore() {
 		std::cout << "increased player score to " << player->score << std::endl;
@@ -81,6 +83,24 @@ public:
 		isRunning = false;
 	}
 
+	void setStopped() {
+		isStopped = true;
+	}
+
+	bool getIsStopped() {
+		return isStopped;
+	}
+
+	void reset() {
+		initMaze();
+		initFrames();
+		initScorePanel();
+		player->reset();
+		isRunning = true;
+		isStopped = false;
+		wave_velocity = 0;
+	}
+
 	// public attributes for convenience
 	std::vector<std::shared_ptr<EnemyShip>> enemies;
 	sf::RectangleShape left_frame;
@@ -103,7 +123,7 @@ private:
 
 	// variable to make sure windows is running
 	bool isRunning;
-	bool isFinished;
+	bool isStopped;
 
 	// references game objects and logic classes  
 	Input* input = nullptr;

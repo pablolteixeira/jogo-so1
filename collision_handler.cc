@@ -37,7 +37,7 @@ void CollisionHandler::checkPlayerEnemyCollision() {
 			enemy->die();
 			window->increasePlayerScore();
 			window->updateVelocityCounter();
-			window->lowerPlayerLives();
+			window->decreasePlayerLives();
 		}
 	}
 }

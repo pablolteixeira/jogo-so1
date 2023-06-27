@@ -63,7 +63,9 @@ void EnemyShip::run() {
 		if (window == nullptr) {
 			Thread::yield();
 		}
-		update(dt);
+		if (!window->getIsStopped()) {
+			update(dt);
+		}
 		Thread::yield();
 	}
 }

@@ -63,11 +63,16 @@ PlayerShip::~PlayerShip() {
 
 void PlayerShip::run() {
 	while (window->getIsRunning()) {
+		if (getIsDead()) {
+			window->setStopped();
+		}
 		if (window == nullptr) {
 			Thread::yield();
 		}
-		processUserInput();
-		move(dt);
+		if (!window->getIsStopped()) {
+			processUserInput();
+			move(dt);
+		}
 		Thread::yield();
 	}
 }
