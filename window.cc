@@ -17,7 +17,6 @@ Window::Window(sf::RenderWindow& window)
 	initFrames();
 	initScorePanel();
 	isRunning = true;
-	isFinished = false;
 };
 
 void Window::runWindow() {
@@ -41,8 +40,7 @@ void Window::handleKeyboardInput() {
 		{
 			player->setUserKeyPress(key);
 		} else if (key == sf::Keyboard::P) {
-			// TODO: isPaused on P 
-			//isPaused = !this->isPaused;
+			isPaused = !this->isPaused;
 		} else if (key == sf::Keyboard::Q) {
 			window.close();
 			stopRunning();

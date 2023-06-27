@@ -23,7 +23,7 @@ struct Traits {
 
 template<> struct Traits<CPU>
 {
-    static const unsigned int STACK_SIZE = 64000;
+    static const unsigned int STACK_SIZE = 80*1024;
     static const bool debugged = true;
 };
 

@@ -41,6 +41,9 @@ EnemyShip::EnemyShip(sf::Vector2f position, Direction direction, Algorithm algo)
 
 	this->direction = direction;
 	this->algo = algo;
+	if (algo == Algorithm::SNIPER) {
+		directionVector = sf::Vector2f(-1.f, 0.f);
+	}
 
 	isAlive = true;
 
@@ -63,7 +66,9 @@ void EnemyShip::run() {
 		if (window == nullptr) {
 			Thread::yield();
 		}
-		update(dt);
+		if (!window->getIsPaused()) {
+			update(dt);
+		}
 		Thread::yield();
 	}
 }

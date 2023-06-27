@@ -81,6 +81,10 @@ public:
 		isRunning = false;
 	}
 
+	bool getIsPaused() {
+		return isPaused;
+	}
+
 	// public attributes for convenience
 	std::vector<std::shared_ptr<EnemyShip>> enemies;
 	sf::RectangleShape left_frame;
@@ -104,6 +108,7 @@ private:
 	// variable to make sure windows is running
 	bool isRunning;
 	bool isFinished;
+	bool isPaused = false;
 
 	// references game objects and logic classes  
 	Input* input = nullptr;
