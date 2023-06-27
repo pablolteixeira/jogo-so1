@@ -89,6 +89,7 @@ void Game::runWindow() {
 
 void Game::runShotGroup() {
 	shot_group = std::make_unique<ShotGroup>();
+	shot_group->setWindow(window.get());
 	shot_group->runShots();
 	shot_group_thread->thread_exit(4);
 }

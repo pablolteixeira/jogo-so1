@@ -10,6 +10,7 @@
 __BEGIN_API
 
 const float dt = 1.0f / 60.0f;
+class Window;
 
 class ShotGroup {
 public:
@@ -18,11 +19,16 @@ public:
 		// TODO: delete shots maybe?
 	};
 
-	static void runShots();
+	void runShots();
+
+	void setWindow(Window* window); 
 
 	void addShot(std::unique_ptr<Shot> shot);	
 
 	static std::vector<std::unique_ptr<Shot>> shots;
+
+private:
+	Window* window = nullptr;
 };
 
 __END_API

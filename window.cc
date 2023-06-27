@@ -41,7 +41,7 @@ void Window::handleKeyboardInput() {
 			player->setUserKeyPress(key);
 		} else if (key == sf::Keyboard::P) {
 			// TODO: isPaused on P 
-			//isPaused = !this->isPaused;
+			isPaused = !this->isPaused;
 		} else if (key == sf::Keyboard::Q) {
 			// FIXME: need to close the game instead of just closing the window
 			window.close();

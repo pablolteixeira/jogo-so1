@@ -3,6 +3,7 @@
 #include "thread/traits.h"
 #include <memory>
 #include <vector>
+#include "window.h"
 
 __BEGIN_API
 
@@ -15,11 +16,17 @@ void ShotGroup::addShot(std::unique_ptr<Shot> shot) {
 void ShotGroup::runShots() {
 	// FIXME: while game is running
 	while (true) {
-		for (auto& shot : shots) {
-			shot->update(dt);	
+		if (!window->isPaused) {
+			for (auto& shot : shots) {
+				shot->update(dt);	
+			}
 		}
 		Thread::yield();
 	}
 };
+
+void ShotGroup::setWindow(Window* window) {
+	this->window = window;
+}
 
 __END_API

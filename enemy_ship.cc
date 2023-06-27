@@ -42,6 +42,10 @@ EnemyShip::EnemyShip(sf::Vector2f position, Direction direction, Algorithm algo)
 	this->direction = direction;
 	this->algo = algo;
 
+	if (algo == Algorithm::SNIPER) {
+		directionVector = sf::Vector2f(-1.f, 0.f);
+	}
+
 	isAlive = true;
 
     sprite.setTexture(texture);
@@ -64,7 +68,9 @@ void EnemyShip::run() {
 		if (window == nullptr) {
 			Thread::yield();
 		}
-		update(dt);
+		if (!window->isPaused) {
+			update(dt);
+		}
 		Thread::yield();
 	}
 }
@@ -80,7 +86,7 @@ void EnemyShip::die() {
 }
 
 void EnemyShip::update(float dt) {
-	speed = init_speed + (window->getGameVelocity()*1.25f)*10.f;
+	speed = init_speed + (window->getGameVelocity()*1.25f)*15.f;
 
 	if (!isAlive) {
 		if (deathClock.getElapsedTime().asSeconds() >= 2.f) {
@@ -187,15 +193,18 @@ void EnemyShip::move(float dt) {
                 }
 
                 if (shipBounds.left <= frameBounds.left) {
+					std::cout << "check left\n"; 
                     directionVector.x = 1.f;  // Move to the right
                     randomMoveClock.restart();
                 }
                 else if (shipBounds.left + shipBounds.width >= frameBounds.left + frameBounds.width) {
+					std::cout << "check right\n"; 
                     directionVector.x = -1.f;  // Move to the left
                     randomMoveClock.restart();
                 }
                 else if (randomMoveClock.getElapsedTime().asSeconds() >= 2.f) {
-                    directionVector.x *= (static_cast<float>(rand()) / RAND_MAX) > 0.5f ? 1.f : -1.f;  // Reverse direction
+					std::cout << ">= 2f\n"; 
+					directionVector.x = (rand() % 2 == 0) ? 1.0f : -1.0f;
                     randomMoveClock.restart();
                 }
 

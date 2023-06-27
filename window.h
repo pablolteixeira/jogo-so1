@@ -73,6 +73,8 @@ public:
 		velocity_counter %= 4;
 	}
 
+	bool isPaused = false;
+	
 	// public attributes for convenience
 	std::vector<std::shared_ptr<EnemyShip>> enemies;
 	sf::RectangleShape left_frame;

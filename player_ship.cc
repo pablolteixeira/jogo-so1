@@ -67,8 +67,10 @@ void PlayerShip::run() {
 		if (window == nullptr) {
 			Thread::yield();
 		}
-		processUserInput();
-		move(dt);
+		if (!window->isPaused) {
+			processUserInput();
+			move(dt);
+		}
 		Thread::yield();
 	}
 }
