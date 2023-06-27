@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -g -Wall -std=c++17
 INCLUDE = -I./
 SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system
-OBJS = game.o main.o player_ship.o input.o shot.o window.o shot_group.o enemy_ship.o collision_handler.o thread/cpu.o thread/debug.o thread/main_class.o thread/semaphore.o thread/system.o thread/thread.o
+OBJS = game.o main.o player_ship.o input.o shot.o window.o shot_group.o enemy_ship.o collision_handler.o thread/cpu.o thread/debug.o thread/semaphore.o thread/system.o thread/thread.o
 
 all: $(OBJS)
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -o main $(OBJS) $(SFML_LIBS)

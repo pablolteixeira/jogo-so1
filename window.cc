@@ -19,7 +19,7 @@ Window::Window(sf::RenderWindow& window)
 };
 
 void Window::runWindow() {
-	// FIXME: change while(true) to while(is game running)
+	// FIXME: change wile(true) to while(is game running)
 	while (true) {
 		if (input == nullptr || player == nullptr) {
 			Thread::yield();
