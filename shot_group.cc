@@ -14,8 +14,7 @@ void ShotGroup::addShot(std::unique_ptr<Shot> shot) {
 }
 
 void ShotGroup::runShots() {
-	// FIXME: while game is running
-	while (true) {
+	while (window->getIsRunning()) {
 		if (!window->isPaused) {
 			for (auto& shot : shots) {
 				shot->update(dt);	

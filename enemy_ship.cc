@@ -64,19 +64,15 @@ EnemyShip::~EnemyShip(){
 void EnemyShip::run() {
 	// FIXME: remove while true
 	const float dt = 1.0f / 60.0f;
-	while (true) {
+	while (window->getIsRunning()) {
 		if (window == nullptr) {
 			Thread::yield();
 		}
-		if (!window->isPaused) {
+		if (!window->isPaused || !window->getIsStopped()) {
 			update(dt);
 		}
 		Thread::yield();
 	}
-}
-
-void EnemyShip::setWindow(Window* window) { 
-	this->window = window;
 }
 
 void EnemyShip::die() {

@@ -4,6 +4,7 @@
 #include <SFML/Window/Event.hpp>
 #include <map>
 #include "thread/thread.h"
+#include "window.h"
 
 __BEGIN_API
 
@@ -15,8 +16,7 @@ Input::~Input() {
 
 
 void Input::runInput() {
-	// FIXME: while(true) should be while(game is running)
-	while (true) {
+	while (mainWindow->getIsRunning()) {
 		handleEvents();	
 		Thread::yield();
 	}
@@ -29,8 +29,8 @@ void Input::handleEvents() {
 	while (window.pollEvent(ev)) {
 		switch (ev.type) {
 			case sf::Event::Closed:
-				// FIXME: handle this better. End game;
 				window.close();
+				mainWindow->stopRunning();
 				break;
 			case sf::Event::KeyPressed:
 				pushEvent(ev.key);

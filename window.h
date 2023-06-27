@@ -39,7 +39,9 @@ public:
 		return wave_velocity;
 	}
 	void lowerPlayerLives() {
-		player->lives--;
+		if (player->lives == 0) {
+			player->lives--;
+		}
 	}
 	void increasePlayerScore() {
 		std::cout << "increased player score to " << player->score << std::endl;
@@ -60,6 +62,32 @@ public:
 
 	void decreasePlayerLives() {
 		player->lives--;
+	}
+
+	void reset() {
+		initMaze();
+		initFrames();
+		initScorePanel();
+		player->reset();
+		isRunning = true;
+		isStopped = false;
+		wave_velocity = 0;
+	}
+
+	void setStopped() {
+		isStopped = true;
+	}
+
+	bool getIsStopped() {
+		return isStopped;
+	}
+
+	void stopRunning() {
+		isRunning = false;
+	}
+
+	bool getIsRunning() {
+		return isRunning;
 	}
 
 	void updateVelocityCounter() {
@@ -94,6 +122,10 @@ private:
     sf::Text scoreText;
     sf::Text velocityText;
     sf::Font font;
+
+	// variable to make sure windows is running
+	bool isRunning;
+	bool isStopped;
 
 	// references game objects and logic classes  
 	Input* input = nullptr;

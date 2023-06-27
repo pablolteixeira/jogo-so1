@@ -13,7 +13,7 @@ __BEGIN_API
 
 void CollisionHandler::run() {
 	// FIXME: game is running
-	while (true) {
+	while (window->getIsRunning()) {
 		if (window == nullptr) {
 			Thread::yield();
 		}
@@ -38,7 +38,7 @@ void CollisionHandler::checkPlayerEnemyCollision() {
 			enemy->die();
 			window->increasePlayerScore();
 			window->updateVelocityCounter();
-			window->lowerPlayerLives();
+			window->decreasePlayerLives();
 		}
 	}
 }

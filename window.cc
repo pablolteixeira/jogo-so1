@@ -20,7 +20,7 @@ Window::Window(sf::RenderWindow& window)
 
 void Window::runWindow() {
 	// FIXME: change wile(true) to while(is game running)
-	while (true) {
+	while (getIsRunning()) {
 		if (input == nullptr || player == nullptr) {
 			Thread::yield();
 		}
@@ -45,7 +45,11 @@ void Window::handleKeyboardInput() {
 		} else if (key == sf::Keyboard::Q) {
 			// FIXME: need to close the game instead of just closing the window
 			window.close();
+			stopRunning();
 		} else if (key == sf::Keyboard::R) {
+			if (player->getIsDead()) {
+				reset();
+			}
 		}
 	}
 }

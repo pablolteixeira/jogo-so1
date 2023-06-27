@@ -29,8 +29,17 @@ public:
 	void run();
 	sf::Vector2f getPosition() { return sprite.getPosition(); };	
     sf::Sprite sprite;
-	int lives = 3;
+	int lives = 4;
 	int score = 0;
+
+    bool getIsDead() {
+        return lives == 0;
+    }
+
+    void reset() {
+        lives = 3;
+        score = 0;
+    };
 
 	void setWindow(Window* window) { this->window = window; } 
     

@@ -16,7 +16,6 @@ class ShotGroup {
 public:
 	ShotGroup(){};
 	~ShotGroup(){
-		// TODO: delete shots maybe?
 	};
 
 	void runShots();

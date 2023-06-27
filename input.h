@@ -11,7 +11,9 @@
 
 __BEGIN_API
 
+class Window;
 class Input {
+
 public:
 	Input(sf::RenderWindow& window) : window(window) {
 		key_event_queue_mutex = new Semaphore();
@@ -25,7 +27,11 @@ public:
 
 	std::queue<sf::Keyboard::Key> key_event_queue;
 
+	void setWindow(Window* window) { this->mainWindow = window; } 
+
 private:
+	Window* mainWindow = nullptr;
+
 	static Semaphore *key_event_queue_mutex;
 	sf::RenderWindow& window;
 };

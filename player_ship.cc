@@ -61,13 +61,17 @@ PlayerShip::~PlayerShip() {
 	running = false;
 };
 
+
 void PlayerShip::run() {
 	// FIXME: change this to while(game is running) or something
-	while (true) {
+	while (window->getIsRunning()) {
+		if (getIsDead()) {
+			window->setStopped();
+		}
 		if (window == nullptr) {
 			Thread::yield();
 		}
-		if (!window->isPaused) {
+		if (!window->isPaused || !window->getIsStopped()) {
 			processUserInput();
 			move(dt);
 		}

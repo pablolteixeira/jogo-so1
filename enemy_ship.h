@@ -21,12 +21,13 @@ public:
     ~EnemyShip();
     sf::Sprite sprite;
     void update(float dt);
-	void setWindow(Window* window);
 	void die();
 	void run();
 
 	bool isAlive = true;
-    
+
+	void setWindow(Window* window) { this->window = window; } 
+
 private:
 	Window *window = nullptr;	
 

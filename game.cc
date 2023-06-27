@@ -75,6 +75,7 @@ void Game::runPlayer() {
 void Game::runInput() {
 	std::cout << "RUN INPUT\n";
 	input = std::make_unique<Input>(*render_window.get());
+	input->setWindow(window.get());
 	window->setInput(input.get());
 	input->runInput();
 	input_thread->thread_exit(2);
