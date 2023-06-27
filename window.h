@@ -38,11 +38,12 @@ public:
 	int getGameVelocity() {
 		return wave_velocity;
 	}
-	void updateVelocityCounter() {
-
-	}
 	void lowerPlayerLives() {
 		player->lives--;
+	}
+	void increasePlayerScore() {
+		std::cout << "increased player score to " << player->score << std::endl;
+		player->increaseScore();
 	}
 	
 	sf::FloatRect getPlayerBounds() {
@@ -61,6 +62,17 @@ public:
 		player->lives--;
 	}
 
+	void updateVelocityCounter() {
+		if (++velocity_counter % 4 == 0) {
+			std::cout << "velocity counter updated " << velocity_counter << std::endl;
+			wave_velocity++;
+			if (wave_velocity > 3) {
+				wave_velocity = 3;
+			}
+		}
+		velocity_counter %= 4;
+	}
+
 	// public attributes for convenience
 	std::vector<std::shared_ptr<EnemyShip>> enemies;
 	sf::RectangleShape left_frame;
@@ -69,7 +81,8 @@ public:
 private:
 	// this window will render the objects
 	sf::RenderWindow& window;
-	int wave_velocity;
+	int wave_velocity = 0;
+	int velocity_counter = 0;
 	
 	// textures and sprites for the screen 
 	sf::RectangleShape right_frame;

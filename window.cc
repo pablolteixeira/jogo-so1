@@ -133,5 +133,3 @@ void Window::initScorePanel() {
 }
 
 __END_API
-
-

@@ -35,8 +35,8 @@ void CollisionHandler::checkCollisions() {
 void CollisionHandler::checkPlayerEnemyCollision() {
 	for (auto& enemy : window->enemies) {
 		if (enemy->isAlive && enemy->sprite.getGlobalBounds().intersects(window->getPlayerBounds())) {
-			std::cout << "player enemy collision\n";
 			enemy->die();
+			window->increasePlayerScore();
 			window->updateVelocityCounter();
 			window->lowerPlayerLives();
 		}
@@ -49,7 +49,6 @@ void CollisionHandler::checkEnemyEnemyCollision() {
 			if (en1 != en2 && en1->isAlive && en2->isAlive &&
 					en1->sprite.getGlobalBounds().intersects(
 						en2->sprite.getGlobalBounds())) {
-				std::cout << "enemy enemy collision\n";
 				// Calculate the move direction for each enemy
 				sf::Vector2f moveDirection1 = en1->sprite.getPosition() - en2->sprite.getPosition();
 				sf::Vector2f moveDirection2 = -moveDirection1;
@@ -79,12 +78,6 @@ void CollisionHandler::checkShotBorderCollision() {
 	for (auto it = window->shot_group->shots.begin(); it != window->shot_group->shots.end();) {
 		sf::FloatRect shotBounds = (*it)->sprite.getGlobalBounds();
 		sf::FloatRect frameBounds = window->left_frame.getGlobalBounds();
-
-		std::cout << "\n\nSHOT BOUNDS LEFT:"<<shotBounds.left<<std::endl;
-		std::cout << "\n\nSHOT BOUNDS TOP:"<<shotBounds.top<<std::endl;
-		std::cout << "\n\nSHOT BOUNDS LEFT + width:"<<shotBounds.left+shotBounds.width<<std::endl;
-		std::cout << "\n\nSHOT BOUNDS LEFT + height:"<<shotBounds.left+shotBounds.height<<std::endl;
-
 
         // Check if the shot has hit any frame boundary
         if (shotBounds.left < frameBounds.left ||
@@ -140,6 +133,7 @@ void CollisionHandler::checkShotShipCollision() {
 						window->getPlayerBounds()))
 			{
 				it = window->shot_group->shots.erase(it);
+				window->updateVelocityCounter();
 				window->decreasePlayerLives();
 				return;
 			}
@@ -150,6 +144,7 @@ void CollisionHandler::checkShotShipCollision() {
 						enemy->isAlive)
 				{
 					enemy->die();
+					window->increasePlayerScore();
 					it = window->shot_group->shots.erase(it);
 					window->updateVelocityCounter();
 					// TODO: player increase score
@@ -183,24 +178,5 @@ void CollisionHandler::checkShotShotCollision() {
 	}
 }
 
-//void CollisionHandler::checkShotShipCollision(Shot& shot, PlayerShip& playerShip, EnemyShip& enemyShip) {
-//	if (shot.sprite.getGlobalBounds().intersects(enemyShip.sprite.getGlobalBounds()) &&
-//			shot.ship_type == ShipType::PLAYER &&
-//			enemyShip.isAlive && !shot.isDead) { 		
-//		enemyShip.die();
-//        shot.die();
-//		game.updateVelocityCounter();
-//
-//        playerShip.increaseScore();
-//	}
-//}
-//void CollisionHandler::checkShotShotCollision(Shot& shot1, Shot& shot2) {
-//	if (shot1.sprite.getGlobalBounds().intersects(
-//				shot2.sprite.getGlobalBounds())) {
-//		shot1.die();
-//		shot2.die();
-//	}
-//}
-//
-//
 __END_API
+

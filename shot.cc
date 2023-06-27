@@ -28,8 +28,6 @@ Shot::~Shot() {
 void Shot::move(float dt) {
     sprite.move(directionVector * speed * dt);
 	sf::Vector2f result = directionVector * speed * dt;
-	std::cout << "\n\nnew shot x: "<<result.x<<std::endl;
-	std::cout << "\n\nnew shot y: "<<result.y<<std::endl;
 }
 
 void Shot::update(float dt) {

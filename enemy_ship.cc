@@ -80,7 +80,7 @@ void EnemyShip::die() {
 }
 
 void EnemyShip::update(float dt) {
-	speed = init_speed;
+	speed = init_speed + (window->getGameVelocity()*1.5f)*15.f;
 
 	if (!isAlive) {
 		if (deathClock.getElapsedTime().asSeconds() >= 2.f) {
@@ -208,7 +208,6 @@ void EnemyShip::move(float dt) {
 				updateSprite();
 				
                 sprite.move(directionVector * speed * dt);
-				std::cout << "sprite position: x = "<<sprite.getPosition().x<< " y = "<<sprite.getPosition().y << std::endl;
                 break;
             }
     }
