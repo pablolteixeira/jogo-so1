@@ -33,7 +33,8 @@ public:
 	int score = 0;
 
 	void setWindow(Window* window) { this->window = window; } 
-    
+    bool getIsDead();
+
 private:
 	Window* window = nullptr;
 

@@ -144,6 +144,10 @@ void PlayerShip::move(float dt) {
 	sprite.move(directionVector * speed * dt);
 }
 
+bool PlayerShip::getIsDead() {
+	return lives == 0;
+}
+
 void PlayerShip::shoot() {
     float shotWidth = sprite.getGlobalBounds().width / 3.0f;
     float shotHeight = sprite.getGlobalBounds().height / 3.0f;
