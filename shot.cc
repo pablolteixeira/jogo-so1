@@ -18,7 +18,7 @@ Shot::Shot(float startX, float startY, Direction direction, ShipType shipType, f
 
     this->texture.loadFromFile("sprites/space_ships/shot.png");
     this->sprite.setTexture(this->texture);
-    this->sprite.scale(0.5f, 0.5f);
+    this->sprite.scale(0.43f, 0.43f);
     this->sprite.setPosition(this->position);
 }
 

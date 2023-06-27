@@ -90,13 +90,13 @@ void Window::drawScorePanel() {
 }
 
 void Window::initFrames() {
-	left_frame = sf::RectangleShape(sf::Vector2f(window.getSize().x * 2.f / 3.f, window.getSize().y));
+	left_frame = sf::RectangleShape(sf::Vector2f(window.getSize().x * 2.100 / 3.f, window.getSize().y));
     left_frame.setFillColor(sf::Color::Black);
     left_frame.setOutlineThickness(2); // Border thickness
     left_frame.setOutlineColor(sf::Color::Red); // Border color
 	
 	right_frame = sf::RectangleShape(sf::Vector2f(window.getSize().x / 3.f, window.getSize().y));
-    right_frame.setPosition(sf::Vector2f(window.getSize().x * 2.f / 3.f, 0));
+    right_frame.setPosition(sf::Vector2f(window.getSize().x * 2.100 / 3.f, 0));
     right_frame.setFillColor(sf::Color::Black);
     right_frame.setOutlineThickness(2); // Border thickness
     right_frame.setOutlineColor(sf::Color::Blue); // Border color
@@ -105,7 +105,6 @@ void Window::initFrames() {
 void Window::initMaze() {
     maze_tex.loadFromFile("sprites/maze/screen.png");
     maze_sprite.setTexture(maze_tex);
-    maze_sprite.scale(1.5, 1.5);
 }
 
 void Window::initScorePanel() {
@@ -119,17 +118,17 @@ void Window::initScorePanel() {
     this->playerLivesText.setFont(this->font);
     this->playerLivesText.setCharacterSize(24); // adjust the size as you like
     this->playerLivesText.setFillColor(sf::Color::White); // color
-    this->playerLivesText.setPosition(600.f, 20.f); // set position near right side of the window
+	this->playerLivesText.setPosition(window.getSize().x * 2.1 / 3 + 15, 10.f);
 
     this->scoreText.setFont(this->font);
     this->scoreText.setCharacterSize(24);
     this->scoreText.setFillColor(sf::Color::White);
-    this->scoreText.setPosition(600.f, 60.f);
+	this->scoreText.setPosition(window.getSize().x * 2.1 / 3 + 15, 50.f);
 
     this->velocityText.setFont(this->font);
     this->velocityText.setCharacterSize(24);
     this->velocityText.setFillColor(sf::Color::White);
-    this->velocityText.setPosition(600.f, 100.f);
+	this->velocityText.setPosition(window.getSize().x * 2.1 / 3 + 15, 80.f);
 }
 
 __END_API

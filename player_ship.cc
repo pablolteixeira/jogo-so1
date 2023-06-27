@@ -47,12 +47,12 @@ PlayerShip::PlayerShip(sf::Vector2f position, Direction shipDirection) {
 	changeDirection(shipDirection);
 
 	this->sprite.setTexture(texture);
-	this->sprite.setScale(0.5f, 0.5f);
+	this->sprite.setScale(0.43f, 0.43f);
 	this->sprite.setPosition(position);
 
 	running = true;
 
-	this->speed = 180.f;
+	this->speed = 150.f;
 	this->shootDelay = 0.5f;
 	this->shootTimer = 0.f;
 }

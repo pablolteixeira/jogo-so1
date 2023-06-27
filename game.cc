@@ -114,8 +114,9 @@ void Game::run(void *name) {
 
 	// initializing the render window
 	sf::VideoMode video_mode;
-	video_mode.height = 600;
-	video_mode.width = 800;
+	// 543x373	
+	video_mode.height = 373;
+	video_mode.width = 543;
 	render_window = std::make_unique<sf::RenderWindow>(video_mode, "SFML GAME", sf::Style::Titlebar | sf::Style::Close);
 	render_window->setFramerateLimit(60);
 	

@@ -45,7 +45,7 @@ EnemyShip::EnemyShip(sf::Vector2f position, Direction direction, Algorithm algo)
 	isAlive = true;
 
     sprite.setTexture(texture);
-    sprite.setScale(0.5, 0.5);
+    sprite.setScale(0.43, 0.43);
 	sprite.setPosition(position);
     
     speed = init_speed; // Arbitrary speed value
@@ -80,7 +80,7 @@ void EnemyShip::die() {
 }
 
 void EnemyShip::update(float dt) {
-	speed = init_speed + (window->getGameVelocity()*1.5f)*15.f;
+	speed = init_speed + (window->getGameVelocity()*1.25f)*10.f;
 
 	if (!isAlive) {
 		if (deathClock.getElapsedTime().asSeconds() >= 2.f) {
