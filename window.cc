@@ -1,5 +1,6 @@
 
 #include "window.h"
+#include "shot.h"
 #include "thread/thread.h"
 #include "thread/traits.h"
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -14,6 +15,7 @@ Window::Window(sf::RenderWindow& window)
 {
 	initMaze();
 	initFrames();
+	initScorePanel();
 };
 
 void Window::runWindow() {
@@ -29,12 +31,9 @@ void Window::runWindow() {
 }
 
 void Window::handleKeyboardInput() {
-	std::cout << "handle keyboard input\n" << std::flush;
-
 	sf::Keyboard::Key key;
 	
 	if (input->tryPopKey(key)) {
-		std::cout << "inside if try pop key\n" << std::flush;
 		if (key == sf::Keyboard::Up || key == sf::Keyboard::Down || 
 			key == sf::Keyboard::Left || key == sf::Keyboard::Right ||
 			key == sf::Keyboard::Space)
@@ -55,14 +54,39 @@ void Window::handleKeyboardInput() {
 void Window::draw() {
 	window.clear();
 	drawScreen();
+	drawEnemies();
+	drawShots();
+	drawScorePanel();
 	window.draw(player->sprite);
 	window.display();
+}
+
+void Window::drawShots() {
+	for (auto& shot : shot_group->shots) {
+		window.draw(shot->sprite);
+	}
+}
+
+void Window::drawEnemies() {
+	for (auto& enemy : enemies) {
+		if (enemy->isAlive)
+		window.draw(enemy->sprite);
+	}
 }
 
 void Window::drawScreen() {
 	window.draw(right_frame);
 	window.draw(left_frame);
 	window.draw(maze_sprite);
+}
+
+void Window::drawScorePanel() {
+    playerLivesText.setString("Lives: " + std::to_string(player->lives));
+    scoreText.setString("Score: " + std::to_string(player->score));
+    velocityText.setString("Velocity: " + std::to_string(wave_velocity));
+    window.draw(playerLivesText);
+    window.draw(scoreText);
+    window.draw(velocityText);
 }
 
 void Window::initFrames() {
@@ -84,4 +108,30 @@ void Window::initMaze() {
     maze_sprite.scale(1.5, 1.5);
 }
 
+void Window::initScorePanel() {
+	// Load font
+    if (!this->font.loadFromFile("fonts/free_sans_bold.otf")) { // Adjust the file path as necessary
+        std::cout << "Failed to load font\n";
+        exit(1);
+    }
+
+    // Initialize text objects
+    this->playerLivesText.setFont(this->font);
+    this->playerLivesText.setCharacterSize(24); // adjust the size as you like
+    this->playerLivesText.setFillColor(sf::Color::White); // color
+    this->playerLivesText.setPosition(600.f, 20.f); // set position near right side of the window
+
+    this->scoreText.setFont(this->font);
+    this->scoreText.setCharacterSize(24);
+    this->scoreText.setFillColor(sf::Color::White);
+    this->scoreText.setPosition(600.f, 60.f);
+
+    this->velocityText.setFont(this->font);
+    this->velocityText.setCharacterSize(24);
+    this->velocityText.setFillColor(sf::Color::White);
+    this->velocityText.setPosition(600.f, 100.f);
+}
+
 __END_API
+
+

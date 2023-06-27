@@ -5,24 +5,22 @@
 #include <SFML/System/Vector2.hpp>
 #include "enums/direction.h"
 #include "enums/ship_type.h"
+#include "thread/traits.h"
+
+__BEGIN_API
 
 class Shot {
 public:
     Shot(float startX, float startY, Direction direction, ShipType shipType, float speed);
     ~Shot();
-    static void updateShots(float dt);
-    static void renderShots(sf::RenderWindow& window);
-    static void cleanUpShots();
 	void die();
+    void update(float dt);
     
     sf::Sprite sprite;
     bool isDead;
-    static std::vector<Shot*> _shots;
     ShipType ship_type;
 
 private:
-    void update(float dt);
-    void render(sf::RenderWindow& window);
 	void move(float dt);
 
     //  Variables
@@ -33,4 +31,7 @@ private:
 	sf::Vector2f directionVector;
 };
 
+__END_API
+
 #endif
+

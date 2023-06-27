@@ -154,20 +154,15 @@ template<typename ... Tn>
 inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) : _link(this, 
         std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count())
 {
-	std::cout << "in threads constructor" << std::flush;
     db<Thread>(TRC) << "Thread::Thread() called\n";
 
     _context = new Context(entry, an...);
     _id = _thread_counter++;
 
-	std::cout << _id << std::endl << std::flush;
-
     if (_id > 0) {
         _ready.insert(&_link);
     }
     _state = State::READY;
-
-	std::cout << "end of thread constructor\n" << std::flush;
 }
 
 __END_API

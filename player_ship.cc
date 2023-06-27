@@ -1,16 +1,18 @@
 #include "player_ship.h"
 #include "enums/direction.h"
+#include "enums/ship_type.h"
 #include "input.h"
+#include "shot.h"
 #include "thread/thread.h"
 #include "thread/traits.h"
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <cstdio>
+#include <memory>
+#include "window.h"
 
 __BEGIN_API
-
-const float dt = 1.0f / 60.0f;
 
 PlayerShip::PlayerShip(sf::Vector2f position, Direction shipDirection) {
 	if (!this->texture.loadFromFile("sprites/space_ships/space_ship3.png")) {
@@ -60,7 +62,6 @@ PlayerShip::~PlayerShip() {
 };
 
 void PlayerShip::run() {
-	std::cout << "playership::run()\n" << std::flush;
 	// FIXME: change this to while(game is running) or something
 	while (true) {
 		if (window == nullptr) {
@@ -112,7 +113,6 @@ void PlayerShip::render(sf::RenderWindow& window) {
 
 void PlayerShip::processUserInput() {
 	// TODO: lock para key aqui
-	std::cout << "processUserInput\n" << std::endl;
 	switch(key) {
 		case sf::Keyboard::Up:
 			changeDirection(Direction::UP);
@@ -134,7 +134,6 @@ void PlayerShip::processUserInput() {
 			break;
 	}
 	key = sf::Keyboard::KeyCount; // arbitrary value 
-	std::cout << "default key set\n" << std::endl;
 	// TODO: unlock key aqui
 }
 
@@ -156,8 +155,8 @@ void PlayerShip::shoot() {
     float shotStartX = playerCenterX - shotWidth / 2.0f;
     float shotStartY = playerCenterY - shotHeight / 2.0f;
 
-    Shot* shot = new Shot(shotStartX, shotStartY, this->direction, ShipType::PLAYER, 320.f);
-    Shot::_shots.push_back(shot);
+	std::unique_ptr<Shot> shot = std::make_unique<Shot>(shotStartX, shotStartY, this->direction, ShipType::PLAYER, 320.f);
+	window->addShot(std::move(shot));
 }
 
 __END_API

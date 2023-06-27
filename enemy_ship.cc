@@ -156,6 +156,10 @@ sf::FloatRect EnemyShip::getBoundaryRectangle(const sf::Vector2f& newPosition) {
 }
 
 void EnemyShip::move(float dt) {
+	if (!isAlive) {
+		return;
+	}
+
 	switch (algo) {
 		case Algorithm::FOLLOW_PLAYER:
 			{

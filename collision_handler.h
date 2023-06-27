@@ -22,9 +22,8 @@ public:
 	void checkEnemyEnemyCollision();
 	void checkShipBorderCollision();
 	void checkShotShipCollision();
-	//void checkShotShotCollision();
+	void checkShotShotCollision();
 
-    // Other necessary functions and members for collision handling
 private:
 	Window* window;
 };

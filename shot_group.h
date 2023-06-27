@@ -5,18 +5,24 @@
 #include "thread/traits.h"
 #include <memory>
 #include <vector>
+#include "thread/thread.h"
 
 __BEGIN_API
 
+const float dt = 1.0f / 60.0f;
+
 class ShotGroup {
 public:
-	static void runShots();
-	void addShot(std::unique_ptr<Shot> shot) {
-        shots.push_back(std::move(shot));
-    }
+	ShotGroup(){};
+	~ShotGroup(){
+		// TODO: delete shots maybe?
+	};
 
-private:
-	std::vector<std::unique_ptr<Shot>> shots;
+	static void runShots();
+
+	void addShot(std::unique_ptr<Shot> shot);	
+
+	static std::vector<std::unique_ptr<Shot>> shots;
 };
 
 __END_API

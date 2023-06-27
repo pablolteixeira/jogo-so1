@@ -29,6 +29,7 @@ void CollisionHandler::checkCollisions() {
 	checkShotBorderCollision();
 	checkShipBorderCollision();
 	checkShotShipCollision();
+	checkShotShotCollision();
 }
 
 void CollisionHandler::checkPlayerEnemyCollision() {
@@ -157,6 +158,28 @@ void CollisionHandler::checkShotShipCollision() {
 			}
 		} 
 		++it;
+	}
+}
+
+void CollisionHandler::checkShotShotCollision() {
+	for (auto it1 = window->shot_group->shots.begin(); it1 != window->shot_group->shots.end();) {
+		bool collisionDetected = false;
+
+		for (auto it2 = window->shot_group->shots.begin(); it2 != window->shot_group->shots.end();) {
+			if (it1 != it2 && (*it1)->sprite.getGlobalBounds().intersects((*it2)->sprite.getGlobalBounds())) {
+				it2 = window->shot_group->shots.erase(it2);
+				collisionDetected = true;
+				break;
+			} else {
+				++it2;
+			}
+		}
+
+		if (collisionDetected) {
+			it1 = window->shot_group->shots.erase(it1);
+		} else {
+			++it1;
+		}
 	}
 }
 

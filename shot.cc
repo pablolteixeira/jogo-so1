@@ -1,11 +1,12 @@
 #include "shot.h"
 #include "enums/direction.h"
 #include "enums/ship_type.h"
+#include "thread/traits.h"
 #include <SFML/System/Vector2.hpp>
 #include <iostream>
 #include <vector>
 
-std::vector<Shot*> Shot::_shots;
+__BEGIN_API
 
 Shot::Shot(float startX, float startY, Direction direction, ShipType shipType, float speed) {
     this->position.x = startX;
@@ -19,8 +20,6 @@ Shot::Shot(float startX, float startY, Direction direction, ShipType shipType, f
     this->sprite.setTexture(this->texture);
     this->sprite.scale(0.5f, 0.5f);
     this->sprite.setPosition(this->position);
-
-	Shot::_shots.push_back(this);
 }
 
 Shot::~Shot() {
@@ -28,6 +27,9 @@ Shot::~Shot() {
 
 void Shot::move(float dt) {
     sprite.move(directionVector * speed * dt);
+	sf::Vector2f result = directionVector * speed * dt;
+	std::cout << "\n\nnew shot x: "<<result.x<<std::endl;
+	std::cout << "\n\nnew shot y: "<<result.y<<std::endl;
 }
 
 void Shot::update(float dt) {
@@ -52,34 +54,20 @@ void Shot::update(float dt) {
 	move(dt);
 }
 
-void Shot::render(sf::RenderWindow& window) {
-    window.draw(this->sprite);
-}
-
 void Shot::die() {
-	this->isDead = true;
+
 }
 
-void Shot::cleanUpShots() {
-    // Remover todos os objetos mortos do vetor
-    Shot::_shots.erase(
-        std::remove_if(
-            Shot::_shots.begin(),
-            Shot::_shots.end(),
-            [](Shot* shot) { return shot->isDead; }
-        ),
-        Shot::_shots.end()
-    );
-}
+//void Shot::cleanUpShots() {
+//    // Remover todos os objetos mortos do vetor
+//    Shot::_shots.erase(
+//        std::remove_if(
+//            Shot::_shots.begin(),
+//            Shot::_shots.end(),
+//            [](Shot* shot) { return shot->isDead; }
+//        ),
+//        Shot::_shots.end()
+//    );
+//}
 
-void Shot::updateShots(float dt) {
-	for (auto& shot : Shot::_shots) {
-		shot->update(dt);
-	}
-}
-
-void Shot::renderShots(sf::RenderWindow& window) {
-	for (auto& shot : Shot::_shots) {
-		shot->render(window);
-	}
-}
+__END_API
