@@ -46,7 +46,6 @@ void Window::handleKeyboardInput() {
 			// FIXME: need to close the game instead of just closing the window
 			window.close();
 		} else if (key == sf::Keyboard::R) {
-			
 		}
 	}
 }
