@@ -21,7 +21,7 @@ int Semaphore::fdec(volatile int &number) {
 // Semaphore p implementation
 void Semaphore::p() {
 	db<Semaphore>(TRC) << "Semaphore::p called\n";
-	
+
 	if (fdec(this->value) < 1) {
 		sleep();
 	}

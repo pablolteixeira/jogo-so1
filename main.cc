@@ -1,10 +1,11 @@
-#include "window.h"
+#include "game.h"
+#include "thread/traits.h"
+#include <SFML/System/Time.hpp>
+#include "thread/system.h"
 
-int main(void)
-{
-    Window window;
+__USING_API
 
-    window.run();
-
-    return 0;
+int main() {
+	System::init(&Game::run);
+	return 0;
 }

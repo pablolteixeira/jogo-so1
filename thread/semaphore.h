@@ -31,7 +31,6 @@ private:
     void wakeup_all();
 
 private:
-    //DECLARAÇÃO DOS ATRIBUTOS DO SEMÁFORO
     Queue sleeping_queue;
     int value;
 };
